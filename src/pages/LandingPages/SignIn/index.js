@@ -1,68 +1,92 @@
-/**
-=========================================================
-* Material Kit 2 React - v2.1.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/material-kit-react
-* Copyright 2023 Creative Tim (https://www.creative-tim.com)
-
-Coded by www.creative-tim.com
-
- =========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-*/
-
 import { useState } from "react";
 
 // react-router-dom components
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 // @mui material components
+import { CircularProgress } from "@mui/material";
 import Card from "@mui/material/Card";
-import Switch from "@mui/material/Switch";
 import Grid from "@mui/material/Grid";
-import MuiLink from "@mui/material/Link";
+import Switch from "@mui/material/Switch";
 
 // @mui icons
-import FacebookIcon from "@mui/icons-material/Facebook";
-import GitHubIcon from "@mui/icons-material/GitHub";
-import GoogleIcon from "@mui/icons-material/Google";
 
 // Material Kit 2 React components
 import MKBox from "components/MKBox";
-import MKTypography from "components/MKTypography";
-import MKInput from "components/MKInput";
 import MKButton from "components/MKButton";
+import MKInput from "components/MKInput";
+import MKTypography from "components/MKTypography";
 
 // Material Kit 2 React example components
-import DefaultNavbar from "examples/Navbars/DefaultNavbar";
 import SimpleFooter from "examples/Footers/SimpleFooter";
+import DefaultNavbar from "examples/Navbars/DefaultNavbar";
 
 // Material Kit 2 React page layout routes
 import routes from "routes";
 
+// API support
+import api from "utils/api";
+import helper from "utils/helper";
+import { auth, info } from "utils/path";
+
 // Images
 import bgImage from "assets/images/bg-sign-in-basic.jpeg";
 
+import { toast } from "react-toastify";
+
 function SignInBasic() {
   const [rememberMe, setRememberMe] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [isLoading, setLoading] = useState(false);
+
+  const navigate = useNavigate();
 
   const handleSetRememberMe = () => setRememberMe(!rememberMe);
 
+  const handleInputChange = (e) => {
+    if (e.target.name === "email") {
+      setEmail(e.target.value);
+    } else {
+      setPassword(e.target.value);
+    }
+  };
+
+  const handleSubmit = () => {
+    if (rememberMe) {
+      localStorage.setItem("oldEmail", email);
+      localStorage.setItem("oldPassword", password);
+    }
+
+    setLoading(true);
+
+    const payload = { email: email, password: password };
+    const res = api.post({ path: auth.login, payload: payload });
+    res.then((response) => {
+      helper.setCookie(response.data.data.access_token);
+      api.setJwtToken(helper.getCookie());
+      const res = api.get({ path: info });
+      res
+        .then((response) => {
+          helper.setStorage("user", JSON.stringify(response.data?.data));
+          toast.success(`Welcome ${response.data?.data?.name}`, {
+            position: toast.POSITION.BOTTOM_LEFT,
+          });
+
+          if (helper.getStorage("user")) {
+            setLoading(false);
+            navigate("/");
+          }
+        })
+        .catch((error) => {
+          toast.danger(`Error while login ${error.errors[0]?.message}`);
+        });
+    });
+  };
+
   return (
     <>
-      <DefaultNavbar
-        routes={routes}
-        action={{
-          type: "external",
-          route: "https://www.creative-tim.com/product/material-kit-react",
-          label: "free download",
-          color: "info",
-        }}
-        transparent
-        light
-      />
+      <DefaultNavbar routes={routes} transparent light />
       <MKBox
         position="absolute"
         top={0}
@@ -99,31 +123,28 @@ function SignInBasic() {
                 <MKTypography variant="h4" fontWeight="medium" color="white" mt={1}>
                   Sign in
                 </MKTypography>
-                <Grid container spacing={3} justifyContent="center" sx={{ mt: 1, mb: 2 }}>
-                  <Grid item xs={2}>
-                    <MKTypography component={MuiLink} href="#" variant="body1" color="white">
-                      <FacebookIcon color="inherit" />
-                    </MKTypography>
-                  </Grid>
-                  <Grid item xs={2}>
-                    <MKTypography component={MuiLink} href="#" variant="body1" color="white">
-                      <GitHubIcon color="inherit" />
-                    </MKTypography>
-                  </Grid>
-                  <Grid item xs={2}>
-                    <MKTypography component={MuiLink} href="#" variant="body1" color="white">
-                      <GoogleIcon color="inherit" />
-                    </MKTypography>
-                  </Grid>
-                </Grid>
               </MKBox>
               <MKBox pt={4} pb={3} px={3}>
                 <MKBox component="form" role="form">
                   <MKBox mb={2}>
-                    <MKInput type="email" label="Email" fullWidth />
+                    <MKInput
+                      name="email"
+                      type="email"
+                      label="Email"
+                      value={email}
+                      onChange={handleInputChange}
+                      fullWidth
+                    />
                   </MKBox>
                   <MKBox mb={2}>
-                    <MKInput type="password" label="Password" fullWidth />
+                    <MKInput
+                      name="password"
+                      type="password"
+                      label="Password"
+                      value={password}
+                      onChange={handleInputChange}
+                      fullWidth
+                    />
                   </MKBox>
                   <MKBox display="flex" alignItems="center" ml={-1}>
                     <Switch checked={rememberMe} onChange={handleSetRememberMe} />
@@ -138,25 +159,42 @@ function SignInBasic() {
                     </MKTypography>
                   </MKBox>
                   <MKBox mt={4} mb={1}>
-                    <MKButton variant="gradient" color="info" fullWidth>
+                    <MKButton
+                      onClick={handleSubmit}
+                      variant="gradient"
+                      color={isLoading ? "secondary" : "info"}
+                      disabled={isLoading}
+                      fullWidth
+                      style={{ position: "relative" }}
+                    >
+                      {isLoading && (
+                        <CircularProgress
+                          style={{
+                            position: "absolute",
+                            left: "33%",
+                            alignSelf: "center",
+                          }}
+                          size={"1rem"}
+                        />
+                      )}
                       sign in
                     </MKButton>
                   </MKBox>
-                  <MKBox mt={3} mb={1} textAlign="center">
-                    <MKTypography variant="button" color="text">
-                      Don&apos;t have an account?{" "}
-                      <MKTypography
-                        component={Link}
-                        to="/authentication/sign-up/cover"
-                        variant="button"
-                        color="info"
-                        fontWeight="medium"
-                        textGradient
-                      >
-                        Sign up
-                      </MKTypography>
+                </MKBox>
+                <MKBox mt={3} mb={1} textAlign="center">
+                  <MKTypography variant="button" color="text">
+                    Don&apos;t have an account?{" "}
+                    <MKTypography
+                      component={Link}
+                      to="/authentication/sign-up/cover"
+                      variant="button"
+                      color="info"
+                      fontWeight="medium"
+                      textGradient
+                    >
+                      Sign up
                     </MKTypography>
-                  </MKBox>
+                  </MKTypography>
                 </MKBox>
               </MKBox>
             </Card>

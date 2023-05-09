@@ -14,7 +14,7 @@ Coded by www.creative-tim.com
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 */
 
-import { Fragment, useState, useEffect } from "react";
+import { Fragment, useEffect, useState } from "react";
 
 // react-router components
 import { Link } from "react-router-dom";
@@ -24,17 +24,17 @@ import PropTypes from "prop-types";
 
 // @mui material components
 import Container from "@mui/material/Container";
-import Icon from "@mui/material/Icon";
-import Popper from "@mui/material/Popper";
-import Grow from "@mui/material/Grow";
-import Grid from "@mui/material/Grid";
 import Divider from "@mui/material/Divider";
+import Grid from "@mui/material/Grid";
+import Grow from "@mui/material/Grow";
+import Icon from "@mui/material/Icon";
 import MuiLink from "@mui/material/Link";
+import Popper from "@mui/material/Popper";
 
 // Material Kit 2 React components
 import MKBox from "components/MKBox";
-import MKTypography from "components/MKTypography";
 import MKButton from "components/MKButton";
+import MKTypography from "components/MKTypography";
 
 // Material Kit 2 React example components
 import DefaultNavbarDropdown from "examples/Navbars/DefaultNavbar/DefaultNavbarDropdown";
@@ -215,6 +215,7 @@ function DefaultNavbar({ brand, routes, transparent, light, action, sticky, rela
             alignItems="center"
             variant="button"
             textTransform="capitalize"
+            onClick={item.onClick}
             minWidth={item.description ? "14rem" : "12rem"}
             color={item.description ? "dark" : "text"}
             fontWeight={item.description ? "bold" : "regular"}
