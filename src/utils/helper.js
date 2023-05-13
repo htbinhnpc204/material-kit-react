@@ -3,9 +3,13 @@ const cookieName = "RW-Authorization";
 
 const cookie = new Cookies();
 const helper = {};
+const hourInMillis = 60 * 60 * 1000;
 
 helper.setCookie = (data) => {
-  return cookie.set(cookieName, data);
+  cookie.set(cookieName, data, {
+    path: "/",
+    expires: new Date(Date.now() + hourInMillis),
+  });
 };
 
 helper.getCookie = () => {

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 // react-router-dom components
 import { Link, useNavigate } from "react-router-dom";
@@ -22,7 +22,6 @@ import SimpleFooter from "examples/Footers/SimpleFooter";
 import DefaultNavbar from "examples/Navbars/DefaultNavbar";
 
 // Material Kit 2 React page layout routes
-import routes from "routes";
 
 // API support
 import api from "utils/api";
@@ -32,7 +31,8 @@ import { auth, info } from "utils/path";
 // Images
 import bgImage from "assets/images/bg-sign-in-basic.jpeg";
 
-import { toast } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function SignInBasic() {
   const [rememberMe, setRememberMe] = useState(false);
@@ -61,32 +61,46 @@ function SignInBasic() {
     setLoading(true);
 
     const payload = { email: email, password: password };
-    const res = api.post({ path: auth.login, payload: payload });
-    res.then((response) => {
-      helper.setCookie(response.data.data.access_token);
-      api.setJwtToken(helper.getCookie());
-      const res = api.get({ path: info });
-      res
-        .then((response) => {
-          helper.setStorage("user", JSON.stringify(response.data?.data));
-          toast.success(`Welcome ${response.data?.data?.name}`, {
-            position: toast.POSITION.BOTTOM_LEFT,
-          });
+    const loginRes = api.post({ path: auth.login, payload: payload });
+    loginRes
+      .then((response) => {
+        helper.setCookie(response.data.data.access_token);
+        api.setJwtToken(helper.getCookie());
+        const infoRes = api.get({ path: info });
+        infoRes
+          .then((response) => {
+            helper.setStorage("user", JSON.stringify(response.data?.data));
+            toast.success(`Welcome ${response.data?.data?.name}`, {
+              position: toast.POSITION.BOTTOM_LEFT,
+            });
 
-          if (helper.getStorage("user")) {
+            if (helper.getStorage("user")) {
+              setLoading(false);
+              navigate("/");
+            }
+          })
+          .catch(() => {
             setLoading(false);
-            navigate("/");
-          }
-        })
-        .catch((error) => {
-          toast.danger(`Error while login ${error.errors[0]?.message}`);
+          });
+      })
+      .catch(() => {
+        setLoading(false);
+        toast.error(`Email or password is incorrect!!`, {
+          position: toast.POSITION.BOTTOM_LEFT,
         });
-    });
+      });
   };
+
+  useEffect(() => {
+    if (JSON.parse(helper.getStorage("user"))) {
+      navigate("/");
+    }
+  }, []);
 
   return (
     <>
-      <DefaultNavbar routes={routes} transparent light />
+      <ToastContainer />
+      <DefaultNavbar routes={[]} transparent light />
       <MKBox
         position="absolute"
         top={0}
@@ -202,7 +216,10 @@ function SignInBasic() {
         </Grid>
       </MKBox>
       <MKBox width="100%" position="absolute" zIndex={2} bottom="1.625rem">
-        <SimpleFooter light />
+        <SimpleFooter
+          company={{ href: "https://fb.me/binhhothai204", name: "Hồ Thái Bình" }}
+          light
+        />
       </MKBox>
     </>
   );

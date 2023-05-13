@@ -1,5 +1,10 @@
+import BaseLayout from "pages/BaseLayout";
 import Landing from "pages/Landing";
 
 export default function LandingPage() {
-  return <Landing />;
+  return (
+    <BaseLayout>
+      <Landing />
+    </BaseLayout>
+  );
 }

@@ -3,6 +3,8 @@ export const auth = {
   register: "/auth/register",
 };
 
-export const lab = "/labs";
+export const labs = "/labs";
+
+export const users = "/users";
 
 export const info = "/me";
