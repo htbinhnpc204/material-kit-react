@@ -160,7 +160,6 @@ function Lab() {
                 <CardContent>
                   <Typography variant="body2">Managed by: {lab.manager.name}</Typography>
                   <Typography variant="body1">{lab.description}</Typography>
-                  <img src={lab.avatar} alt={lab.name} />
                 </CardContent>
                 <MKBox
                   style={{

@@ -20,8 +20,6 @@ function LabModal({ lab, isOpen, onClose, onSubmit }) {
   const [name, setName] = useState(lab?.name || "");
   const [description, setDescription] = useState(lab?.description || "");
   const [manager, setManager] = useState(lab?.manager || null);
-  const [avatar, setAvatar] = useState(null);
-  const [avatarValue, setAvatarValue] = useState("");
   const [managers, setManagers] = useState([]);
 
   const handleNameChange = (event) => {
@@ -36,25 +34,18 @@ function LabModal({ lab, isOpen, onClose, onSubmit }) {
     setManager(value);
   };
 
-  const handleAvatarChange = (e) => {
-    setAvatar(e.target.files[0]);
-  };
-
   const refreshState = () => {
     setName(lab?.name || "");
     setDescription(lab?.description || "");
     setManager(lab?.manager || null);
-    setAvatarValue(lab?.avatar || "");
   };
 
   const handleSave = () => {
-    console.log(avatar);
     onSubmit({
       id: lab?.id,
       name: name,
       description: description,
       manager: manager,
-      avatar: avatar,
     });
   };
 

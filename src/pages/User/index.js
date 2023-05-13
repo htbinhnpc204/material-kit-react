@@ -11,8 +11,9 @@ import { Table, TableBody, TableCell, TableRow } from "@mui/material";
 import { debounce } from "lodash";
 import { useCallback, useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import { users as userPath } from "utils/path";
+import { roles as rolePath, users as userPath } from "utils/path";
 
+import moment from "moment";
 import api from "utils/api";
 import helper from "utils/helper";
 
@@ -21,6 +22,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 
 import "react-toastify/dist/ReactToastify.css";
+import UserModal from "./component/UserModal";
 
 function User() {
   const [users, setUsers] = useState([]);
@@ -29,7 +31,8 @@ function User() {
   const [searchValue, setSearchValue] = useState("");
   const [keyword, setKeyword] = useState("");
   const [openModal, setOpenModal] = useState(false);
-  const [selectedLab, setSelectedLab] = useState({});
+  const [selectedUser, setSelectedUser] = useState({});
+  const [roles, setRoles] = useState([]);
 
   const handleSearch = useCallback(
     debounce((value) => {
@@ -49,39 +52,44 @@ function User() {
   };
 
   const handleAddLab = () => {
-    setSelectedLab(null);
+    setSelectedUser(null);
     handleOpenModal();
   };
 
-  const handleEdit = (lab) => {
-    setSelectedLab(lab);
+  const handleEdit = (user) => {
+    setSelectedUser(user);
     handleOpenModal();
   };
 
-  const handleSaveLab = (newLab) => {
+  const handleSaveUser = (newUser) => {
     const formData = new FormData();
-    formData.append("name", newLab.name);
-    formData.append("description", newLab.description);
-    formData.append("manager", newLab.manager.id);
-    newLab.avatar && formData.append("avatar", newLab.avatar);
+    formData.append("email", newUser.email);
+    formData.append("student_id", newUser.studentId);
+    formData.append("name", newUser.name);
+    formData.append("dob", moment(newUser?.dob?.$d).toISOString());
+    formData.append("phone", newUser.phone);
+    formData.append("address", newUser.address);
+    formData.append("role", newUser.role);
+    formData.append("gender", newUser.gender);
+    newUser.avatar && formData.append("avatar", newUser.avatar);
 
-    if (newLab.id) {
+    if (newUser.id) {
       formData.append("_method", "PUT");
       api.setJwtToken(helper.getCookie());
       const res = api.put({
-        path: `${userPath}/${newLab.id}`,
+        path: `${userPath}/${newUser.id}`,
         payload: formData,
         isMultipart: true,
       });
       res.then(() => {
-        toast.success(`Updated ${newLab.name}!!!`);
+        toast.success(`Updated ${newUser.name}!!!`);
         fetchUsers();
       });
     } else {
       api.setJwtToken(helper.getCookie());
       const res = api.post({ path: `${userPath}`, payload: formData, isMultipart: true });
       res.then(() => {
-        toast.success(`Created ${newLab.name}!!!`);
+        toast.success(`Created ${newUser.name}!!!`);
         fetchUsers();
       });
     }
@@ -98,13 +106,12 @@ function User() {
     console.log(id);
   };
 
-  const handleDelete = (labDelete) => {
-    console.log(labDelete);
-    if (confirm(`Do you want to delete lab ${labDelete.name}`)) {
+  const handleDelete = (userDelete) => {
+    if (confirm(`Do you want to delete user ${userDelete.name || userDelete.email}`)) {
       api.setJwtToken(helper.getCookie());
-      const res = api.delete({ path: `${userPath}/${labDelete.id}` });
+      const res = api.delete({ path: `${userPath}/${userDelete.id}` });
       res.then(() => {
-        toast.success(`Deleted ${labDelete.name}!!!`);
+        toast.success(`Deleted ${userDelete.name}!!!`);
         fetchUsers();
       });
     }
@@ -119,14 +126,30 @@ function User() {
     });
   };
 
+  const fetchRoles = () => {
+    api.setJwtToken(helper.getCookie());
+    const res = api.get({ path: `${rolePath}` });
+    res.then((response) => {
+      setRoles(response.data?.data?.items);
+    });
+  };
+
   useEffect(() => {
     if (helper.getCookie()) {
       fetchUsers();
+      fetchRoles();
     }
   }, [page, keyword]);
 
   return (
     <>
+      <UserModal
+        user={selectedUser}
+        roles={roles}
+        isOpen={openModal}
+        onClose={handleCloseModal}
+        onSubmit={handleSaveUser}
+      />
       <MKBox key={"users"}>
         <Grid container spacing={2} sx={{ my: 4 }}>
           <Grid item xs={12} md={12} lg={8}>
@@ -135,6 +158,7 @@ function User() {
               size="small"
               label="Search users"
               fullWidth
+              name="search"
               value={searchValue}
               onChange={handleSearchChange}
             />
@@ -160,22 +184,37 @@ function User() {
             </TableRow>
           </TableBody>
           <TableBody>
-            {users.map((user) => {
-              let i = 1;
+            {users.map((user, idx) => {
               return (
                 <TableRow key={user.id}>
-                  <TableCell>{i++}</TableCell>
+                  <TableCell>{idx + 1}</TableCell>
                   <TableCell>{user.name}</TableCell>
                   <TableCell>{user.email}</TableCell>
                   <TableCell align="center">{user.gender}</TableCell>
-                  <TableCell style={{ width: 10 }} align="center">
-                    <VisibilityIcon />
+                  <TableCell style={{ width: 10, padding: 0 }} align="center">
+                    <MKButton color="info" variant="text" size="small">
+                      <VisibilityIcon />
+                    </MKButton>
                   </TableCell>
-                  <TableCell style={{ width: 10 }} align="center">
-                    <EditIcon />
+                  <TableCell style={{ width: 10, padding: 0 }} align="center">
+                    <MKButton
+                      color="success"
+                      variant="text"
+                      size="small"
+                      onClick={() => handleEdit(user)}
+                    >
+                      <EditIcon />
+                    </MKButton>
                   </TableCell>
-                  <TableCell style={{ width: 10 }} align="center">
-                    <DeleteIcon />
+                  <TableCell style={{ width: 10, padding: 0 }} align="center">
+                    <MKButton
+                      color="error"
+                      variant="text"
+                      size="small"
+                      onClick={() => handleDelete(user)}
+                    >
+                      <DeleteIcon />
+                    </MKButton>
                   </TableCell>
                 </TableRow>
               );
