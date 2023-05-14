@@ -65,6 +65,10 @@ function BaseLayout({ children }) {
           name: "Quản lý phòng máy",
           route: "/labs",
         },
+        {
+          name: "Quản lý máy tính",
+          route: "/computers",
+        },
       ],
     },
     {

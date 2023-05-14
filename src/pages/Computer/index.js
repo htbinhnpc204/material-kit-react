@@ -15,22 +15,23 @@ import { CardContent, CardHeader, Typography } from "@mui/material";
 import { debounce } from "lodash";
 import { useCallback, useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import { labs as labPath } from "utils/path";
+import { computers as computerPath, labs as labPath } from "utils/path";
 
 import api from "utils/api";
 import helper from "utils/helper";
-import LabModal from "./component/LabModal";
+import ComputerModal from "./component/ComputerModal";
 
 import "react-toastify/dist/ReactToastify.css";
 
-function Lab() {
+function Computer() {
+  const [computers, setComputers] = useState([]);
   const [labs, setLabs] = useState([]);
   const [page, setPage] = useState(1);
   const [pagination, setPagination] = useState({});
   const [searchValue, setSearchValue] = useState("");
   const [keyword, setKeyword] = useState("");
   const [openModal, setOpenModal] = useState(false);
-  const [selectedLab, setSelectedLab] = useState({});
+  const [selectedCompuTer, setSelectedComputer] = useState({});
 
   const handleSearch = useCallback(
     debounce((value) => {
@@ -49,41 +50,39 @@ function Lab() {
     setOpenModal(false);
   };
 
-  const handleAddLab = () => {
-    setSelectedLab(null);
+  const handleAddComputer = () => {
+    setSelectedComputer(null);
     handleOpenModal();
   };
 
-  const handleEdit = (lab) => {
-    setSelectedLab(lab);
+  const handleEdit = (computer) => {
+    setSelectedComputer(computer);
     handleOpenModal();
   };
 
-  const handleSaveLab = (newLab) => {
+  const handleSaveComputer = (newCom) => {
     const formData = new FormData();
-    formData.append("name", newLab.name);
-    formData.append("description", newLab.description);
-    formData.append("manager", newLab.manager.id);
-    newLab.avatar && formData.append("avatar", newLab.avatar);
+    formData.append("name", newCom.name);
+    formData.append("description", newCom.description);
+    formData.append("lab_id", newCom.lab.id);
 
-    if (newLab.id) {
+    if (newCom.id) {
       formData.append("_method", "PUT");
       api.setJwtToken(helper.getCookie());
       const res = api.put({
-        path: `${labPath}/${newLab.id}`,
+        path: `${computerPath}/${newCom.id}`,
         payload: formData,
-        isMultipart: true,
       });
       res.then(() => {
-        toast.success(`Updated ${newLab.name}!!!`);
-        fetchLabs();
+        toast.success(`Updated ${newCom.name}!!!`);
+        fetchComputers();
       });
     } else {
       api.setJwtToken(helper.getCookie());
-      const res = api.post({ path: `${labPath}`, payload: formData, isMultipart: true });
+      const res = api.post({ path: `${computerPath}`, payload: formData });
       res.then(() => {
-        toast.success(`Created ${newLab.name}!!!`);
-        fetchLabs();
+        toast.success(`Created ${newCom.name}!!!`);
+        fetchComputers();
       });
     }
     handleCloseModal();
@@ -99,16 +98,24 @@ function Lab() {
     console.log(id);
   };
 
-  const handleDelete = (labDelete) => {
-    console.log(labDelete);
-    if (confirm(`Do you want to delete lab ${labDelete.name}`)) {
+  const handleDelete = (delCom) => {
+    if (confirm(`Do you want to delete ${delCom.name}`)) {
       api.setJwtToken(helper.getCookie());
-      const res = api.delete({ path: `${labPath}/${labDelete.id}` });
+      const res = api.delete({ path: `${computerPath}/${delCom.id}` });
       res.then(() => {
-        toast.success(`Deleted ${labDelete.name}!!!`);
+        toast.success(`Deleted ${delCom.name}!!!`);
         fetchLabs();
       });
     }
+  };
+
+  const fetchComputers = () => {
+    api.setJwtToken(helper.getCookie());
+    const res = api.get({ path: `${computerPath}?page=${page}&keyword=${keyword}` });
+    res.then((response) => {
+      setComputers(response.data?.data?.items);
+      setPagination(response.data?.data?.pagination);
+    });
   };
 
   const fetchLabs = () => {
@@ -116,23 +123,24 @@ function Lab() {
     const res = api.get({ path: `${labPath}?page=${page}&keyword=${keyword}` });
     res.then((response) => {
       setLabs(response.data?.data?.items);
-      setPagination(response.data?.data?.pagination);
     });
   };
 
   useEffect(() => {
     if (helper.getCookie()) {
+      fetchComputers();
       fetchLabs();
     }
   }, [page, keyword]);
 
   return (
     <>
-      <LabModal
-        lab={selectedLab}
-        isOpen={openModal}
+      <ComputerModal
+        computer={selectedCompuTer}
+        labs={labs}
+        onSubmit={handleSaveComputer}
         onClose={handleCloseModal}
-        onSubmit={handleSaveLab}
+        isOpen={openModal}
       />
       <MKBox key={"labs"}>
         <Grid container spacing={2} sx={{ my: 4 }}>
@@ -140,27 +148,26 @@ function Lab() {
             <MKInput
               variant="outlined"
               size="small"
-              label="Search labs"
+              label="Search computer"
               fullWidth
               value={searchValue}
               onChange={handleSearchChange}
             />
           </Grid>
           <Grid item xs={12} md={6} lg={4} sx={{ display: "flex", justifyContent: "flex-end" }}>
-            <MKButton variant="contained" startIcon={<Add />} onClick={() => handleAddLab()}>
-              Add lab
+            <MKButton variant="contained" startIcon={<Add />} onClick={() => handleAddComputer()}>
+              Add computer
             </MKButton>
           </Grid>
         </Grid>
         <Grid container spacing={2}>
-          {labs.map((lab) => (
-            <Grid item xs={12} sm={6} md={4} key={lab.name}>
+          {computers.map((computer) => (
+            <Grid item xs={12} sm={6} md={4} key={computer.name}>
               <Card sx={{ height: "250px" }}>
-                <CardHeader title={lab.name} />
+                <CardHeader title={computer.name} />
                 <CardContent>
-                  <Typography variant="body2">Managed by: {lab.manager.name}</Typography>
-                  <Typography variant="body2">Computers: {lab.computers?.length}</Typography>
-                  <Typography variant="body1">{lab.description}</Typography>
+                  <Typography variant="body2">Belong to: {computer.lab?.name}</Typography>
+                  <Typography variant="body1">{computer.description}</Typography>
                 </CardContent>
                 <MKBox
                   style={{
@@ -175,7 +182,7 @@ function Lab() {
                     color="info"
                     variant="text"
                     size="small"
-                    onClick={() => handleView(lab.id)}
+                    onClick={() => handleView(computer.id)}
                   >
                     View
                   </MKButton>
@@ -184,7 +191,7 @@ function Lab() {
                     color="success"
                     variant="text"
                     size="small"
-                    onClick={() => handleEdit(lab)}
+                    onClick={() => handleEdit(computer)}
                   >
                     Edit
                   </MKButton>
@@ -193,7 +200,7 @@ function Lab() {
                     color="primary"
                     variant="text"
                     size="small"
-                    onClick={() => handleDelete(lab)}
+                    onClick={() => handleDelete(computer)}
                   >
                     Delete
                   </MKButton>
@@ -214,4 +221,4 @@ function Lab() {
   );
 }
 
-export default Lab;
+export default Computer;

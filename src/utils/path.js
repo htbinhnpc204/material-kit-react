@@ -7,6 +7,8 @@ export const labs = "/labs";
 
 export const users = "/users";
 
+export const computers = "/computers";
+
 export const roles = "/roles";
 
 export const info = "/me";
