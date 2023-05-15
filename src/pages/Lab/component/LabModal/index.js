@@ -69,7 +69,7 @@ function LabModal({ lab, isOpen, onClose, onSubmit }) {
     <Dialog open={isOpen} onClose={onClose}>
       <DialogTitle>{lab ? "Edit Lab" : "Add Lab"}</DialogTitle>
       <DialogContent>
-        <MKBox mb={2}>
+        <MKBox mt={1} mb={2}>
           <MKInput label="Name" fullWidth value={name} onChange={handleNameChange} />
         </MKBox>
         <MKBox mb={2}>

@@ -4,12 +4,17 @@ const cookieName = "RW-Authorization";
 const cookie = new Cookies();
 const helper = {};
 const hourInMillis = 60 * 60 * 1000;
+const imageSource = "https://play.min.io/utelab/";
 
 helper.setCookie = (data) => {
   cookie.set(cookieName, data, {
     path: "/",
     expires: new Date(Date.now() + hourInMillis),
   });
+};
+
+helper.getImageSource = (image) => {
+  return imageSource + image;
 };
 
 helper.getCookie = () => {

@@ -6,51 +6,65 @@ import Icon from "@mui/material/Icon";
 // Material Kit 2 React components
 import MKAvatar from "components/MKAvatar";
 import MKBox from "components/MKBox";
-import MKButton from "components/MKButton";
 import MKTypography from "components/MKTypography";
 
 // Images
-import profilePicture from "assets/images/bruce-mars.jpg";
+import helper from "utils/helper";
 
 function Profile() {
+  const user = JSON.parse(helper.getStorage("user"));
+  console.log(helper.getImageSource(user?.avatar));
   return (
     <MKBox component="section" py={{ xs: 6, sm: 12 }}>
       <Container>
         <Grid container item xs={12} justifyContent="center" mx="auto">
-          <MKBox mt={{ xs: -16, md: -20 }} textAlign="center">
-            <MKAvatar src={profilePicture} alt="Burce Mars" size="xxl" shadow="xl" />
+          <MKBox mt={{ xs: -20, md: -20 }} textAlign="center">
+            <MKAvatar
+              src={`${helper.getImageSource(user?.avatar)}`}
+              alt="Burce Mars"
+              size="xxl"
+              shadow="xl"
+            />
           </MKBox>
           <Grid container justifyContent="center" py={6}>
             <Grid item xs={12} md={7} mx={{ xs: "auto", sm: 6, md: 1 }}>
               <MKBox display="flex" justifyContent="space-between" alignItems="center" mb={1}>
-                <MKTypography variant="h3">Michael Roven</MKTypography>
-                <MKButton variant="outlined" color="info" size="small">
+                <MKTypography variant="h3">{user?.name}</MKTypography>
+                {/* <MKButton variant="outlined" color="info" size="small">
                   Follow
-                </MKButton>
+                </MKButton> */}
               </MKBox>
               <Grid container spacing={3} mb={3}>
                 <Grid item>
-                  <MKTypography component="span" variant="body2" fontWeight="bold">
-                    323&nbsp;
-                  </MKTypography>
                   <MKTypography component="span" variant="body2" color="text">
-                    Posts
+                    Student ID:&nbsp;
+                  </MKTypography>
+                  <MKTypography component="span" variant="body2" fontWeight="bold">
+                    {user?.student_id || "Null"}
                   </MKTypography>
                 </Grid>
                 <Grid item>
-                  <MKTypography component="span" variant="body2" fontWeight="bold">
-                    3.5k&nbsp;
-                  </MKTypography>
                   <MKTypography component="span" variant="body2" color="text">
-                    Followers
+                    Date of birth:&nbsp;
+                  </MKTypography>
+                  <MKTypography component="span" variant="body2" fontWeight="bold">
+                    {user?.dob ? new Date(user?.dob).toDateString() : "Null"}
                   </MKTypography>
                 </Grid>
                 <Grid item>
-                  <MKTypography component="span" variant="body2" fontWeight="bold">
-                    260&nbsp;
-                  </MKTypography>
                   <MKTypography component="span" variant="body2" color="text">
-                    Following
+                    Phone:&nbsp;
+                  </MKTypography>
+                  <MKTypography component="span" variant="body2" fontWeight="bold">
+                    {user?.phone || "Null"}
+                  </MKTypography>
+                </Grid>
+                <Grid item>
+                  <MKTypography component="span" variant="body2" color="text">
+                    Gender:&nbsp;
+                  </MKTypography>
+                  <MKTypography component="span" variant="body2" fontWeight="bold">
+                    {user?.gender === "NAM" ? "Male" : "Female"}
                   </MKTypography>
                 </Grid>
               </Grid>

@@ -119,7 +119,7 @@ function UserModal({ user, roles, isOpen, onClose, onSubmit }) {
       <Dialog open={isOpen} onClose={onClose}>
         <DialogTitle>{user ? "Edit user" : "Add user"}</DialogTitle>
         <DialogContent>
-          <MKBox mb={2}>
+          <MKBox mt={1} mb={2}>
             <MKInput
               label="Student ID"
               fullWidth

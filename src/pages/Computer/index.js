@@ -166,7 +166,6 @@ function Computer() {
               <Card sx={{ height: "250px" }}>
                 <CardHeader title={computer.name} />
                 <CardContent>
-                  <Typography variant="body2">Belong to: {computer.lab?.name}</Typography>
                   <Typography variant="body1">{computer.description}</Typography>
                 </CardContent>
                 <MKBox

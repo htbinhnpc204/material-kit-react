@@ -72,7 +72,6 @@ function Lab() {
       const res = api.put({
         path: `${labPath}/${newLab.id}`,
         payload: formData,
-        isMultipart: true,
       });
       res.then(() => {
         toast.success(`Updated ${newLab.name}!!!`);
@@ -80,7 +79,7 @@ function Lab() {
       });
     } else {
       api.setJwtToken(helper.getCookie());
-      const res = api.post({ path: `${labPath}`, payload: formData, isMultipart: true });
+      const res = api.post({ path: `${labPath}`, payload: formData });
       res.then(() => {
         toast.success(`Created ${newLab.name}!!!`);
         fetchLabs();
