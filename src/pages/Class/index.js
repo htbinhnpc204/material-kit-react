@@ -40,6 +40,10 @@ function Class() {
   );
 
   const handleAddClass = () => {
+    if (newClassName.trim().length == 0) {
+      toast.error("Class name must not be null");
+      return;
+    }
     api.setJwtToken(helper.getCookie());
     const res = api.post({ path: `${classPath}`, payload: { name: newClassName } });
     res.then(() => {
@@ -87,6 +91,7 @@ function Class() {
       const res = api.delete({ path: `${classPath}/${delCom.id}` });
       res.then(() => {
         toast.success(`Deleted ${delCom.name}!!!`);
+        fetchComputers();
       });
     }
   };

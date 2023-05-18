@@ -104,7 +104,7 @@ function Computer() {
       const res = api.delete({ path: `${computerPath}/${delCom.id}` });
       res.then(() => {
         toast.success(`Deleted ${delCom.name}!!!`);
-        fetchLabs();
+        fetchComputers();
       });
     }
   };

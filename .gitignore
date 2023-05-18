@@ -5,7 +5,7 @@
 .DS_Store
 
 # testing
-/coverage
+/coverage 
 
 # misc
 .DS_Store
