@@ -66,8 +66,16 @@ function BaseLayout({ children }) {
           route: "/labs",
         },
         {
+          name: "Quản lý lớp học",
+          route: "/classes",
+        },
+        {
           name: "Quản lý máy tính",
           route: "/computers",
+        },
+        {
+          name: "Quản lý lịch",
+          route: "/schedules",
         },
       ],
     },
@@ -95,14 +103,14 @@ function BaseLayout({ children }) {
         width="100%"
         sx={{
           backgroundImage: `url(${bgImage})`,
-          backgroundSize: "cover",
+          backgroundSize: "fit",
           backgroundPosition: "top",
           display: "grid",
           placeItems: "center",
         }}
       >
         <Container>
-          <Grid container item xs={12} lg={7} justifyContent="center" mx="auto">
+          <Grid container item mt={3} xs={12} lg={7} justifyContent="center" mx="auto">
             <MKTypography
               variant="h1"
               color="white"

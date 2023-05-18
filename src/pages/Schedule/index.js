@@ -11,9 +11,8 @@ import { Table, TableBody, TableCell, TableRow } from "@mui/material";
 import { debounce } from "lodash";
 import { useCallback, useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import { roles as rolePath, users as userPath } from "utils/path";
+import { classes as classPath, labs as labPath, schedules as schedulePath } from "utils/path";
 
-import moment from "moment";
 import api from "utils/api";
 import helper from "utils/helper";
 
@@ -21,19 +20,18 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 
-import "react-toastify/dist/ReactToastify.css";
-import { info } from "utils/path";
-import UserModal from "./component/UserModal";
+import ScheduleModal from "./component/ScheduleModal";
 
-function User() {
-  const [users, setUsers] = useState([]);
+function Schedule() {
+  const [schedules, setSchedules] = useState([]);
+  const [labs, setLabs] = useState([]);
+  const [classes, setClasses] = useState([]);
   const [page, setPage] = useState(1);
   const [pagination, setPagination] = useState({});
   const [searchValue, setSearchValue] = useState("");
   const [keyword, setKeyword] = useState("");
   const [openModal, setOpenModal] = useState(false);
-  const [selectedUser, setSelectedUser] = useState({});
-  const [roles, setRoles] = useState([]);
+  const [selectedSchedule, setSelectedSchedule] = useState({});
 
   const handleSearch = useCallback(
     debounce((value) => {
@@ -53,55 +51,49 @@ function User() {
   };
 
   const handleAddLab = () => {
-    setSelectedUser(null);
+    setSelectedSchedule(null);
     handleOpenModal();
   };
 
-  const handleEdit = (user) => {
-    setSelectedUser(user);
+  const handleEdit = (schedule) => {
+    setSelectedSchedule(schedule);
     handleOpenModal();
   };
 
-  const handleSaveUser = (newUser) => {
-    const formData = new FormData();
-    formData.append("email", newUser.email);
-    formData.append("student_id", newUser.studentId);
-    formData.append("name", newUser.name);
-    formData.append("dob", moment(newUser?.dob?.$d).toISOString());
-    formData.append("phone", newUser.phone);
-    formData.append("address", newUser.address);
-    formData.append("role", newUser.role);
-    formData.append("gender", newUser.gender);
-    newUser.avatar && formData.append("avatar", newUser.avatar);
+  // const handleSaveUser = (newUser) => {
+  //   const formData = new FormData();
+  //   formData.append("email", newUser.email);
+  //   formData.append("student_id", newUser.studentId);
+  //   formData.append("name", newUser.name);
+  //   formData.append("dob", moment(newUser?.dob?.$d).toISOString());
+  //   formData.append("phone", newUser.phone);
+  //   formData.append("address", newUser.address);
+  //   formData.append("role", newUser.role);
+  //   formData.append("gender", newUser.gender);
+  //   newUser.avatar && formData.append("avatar", newUser.avatar);
 
-    if (newUser.id) {
-      formData.append("_method", "PUT");
-      api.setJwtToken(helper.getCookie());
-      const res = api.put({
-        path: `${userPath}/${newUser.id}`,
-        payload: formData,
-        isMultipart: true,
-      });
-      res.then(() => {
-        const storageUser = JSON.parse(helper.getStorage("user"));
-        if (newUser.id == storageUser.id) {
-          api.get({ path: info }).then((response) => {
-            helper.setStorage(response.data?.data);
-          });
-        }
-        toast.success(`Updated ${newUser.name}!!!`);
-        fetchUsers();
-      });
-    } else {
-      api.setJwtToken(helper.getCookie());
-      const res = api.post({ path: `${userPath}`, payload: formData, isMultipart: true });
-      res.then(() => {
-        toast.success(`Created ${newUser.name}!!!`);
-        fetchUsers();
-      });
-    }
-    handleCloseModal();
-  };
+  //   if (newUser.id) {
+  //     formData.append("_method", "PUT");
+  //     api.setJwtToken(helper.getCookie());
+  //     const res = api.put({
+  //       path: `${schedulePath}/${newUser.id}`,
+  //       payload: formData,
+  //       isMultipart: true,
+  //     });
+  //     res.then(() => {
+  //       toast.success(`Updated ${newUser.name}!!!`);
+  //       fetchSchedules();
+  //     });
+  //   } else {
+  //     api.setJwtToken(helper.getCookie());
+  //     const res = api.post({ path: `${schedulePath}`, payload: formData, isMultipart: true });
+  //     res.then(() => {
+  //       toast.success(`Created ${newUser.name}!!!`);
+  //       fetchSchedules();
+  //     });
+  //   }
+  //   handleCloseModal();
+  // };
 
   const handleSearchChange = (event) => {
     const value = event.target.value;
@@ -113,49 +105,58 @@ function User() {
     console.log(id);
   };
 
-  const handleDelete = (userDelete) => {
-    if (confirm(`Do you want to delete user ${userDelete.name || userDelete.email}`)) {
+  const handleDelete = (scheduleDel) => {
+    if (confirm(`Do you want to delete user ${scheduleDel.name || scheduleDel.email}`)) {
       api.setJwtToken(helper.getCookie());
-      const res = api.delete({ path: `${userPath}/${userDelete.id}` });
+      const res = api.delete({ path: `${schedulePath}/${scheduleDel.id}` });
       res.then(() => {
-        toast.success(`Deleted ${userDelete.name}!!!`);
-        fetchUsers();
+        toast.success(`Deleted ${scheduleDel.name}!!!`);
+        fetchSchedules();
       });
     }
   };
 
-  const fetchUsers = () => {
+  const fetchSchedules = () => {
     api.setJwtToken(helper.getCookie());
-    const res = api.get({ path: `${userPath}?page=${page}&keyword=${keyword}` });
+    const res = api.get({ path: `${schedulePath}?page=${page}&keyword=${keyword}` });
     res.then((response) => {
-      setUsers(response.data?.data?.items);
+      setSchedules(response.data?.data?.items);
       setPagination(response.data?.data?.pagination);
     });
   };
 
-  const fetchRoles = () => {
+  const fetchLabs = () => {
     api.setJwtToken(helper.getCookie());
-    const res = api.get({ path: `${rolePath}` });
+    const res = api.get({ path: `${labPath}` });
     res.then((response) => {
-      setRoles(response.data?.data?.items);
+      setLabs(response.data?.data?.items);
+    });
+  };
+
+  const fetchClasses = () => {
+    api.setJwtToken(helper.getCookie());
+    const res = api.get({ path: `${classPath}` });
+    res.then((response) => {
+      setClasses(response.data?.data?.items);
     });
   };
 
   useEffect(() => {
     if (helper.getCookie()) {
-      fetchUsers();
-      fetchRoles();
+      fetchSchedules();
+      fetchLabs();
     }
   }, [page, keyword]);
 
   return (
     <>
-      <UserModal
-        user={selectedUser}
-        roles={roles}
+      <ScheduleModal
+        schedule={selectedSchedule}
+        classes={classes}
+        labs={labs}
         isOpen={openModal}
         onClose={handleCloseModal}
-        onSubmit={handleSaveUser}
+        // onSubmit={handleSaveUser}
       />
       <MKBox key={"users"}>
         <Grid container spacing={2} sx={{ my: 4 }}>
@@ -163,7 +164,7 @@ function User() {
             <MKInput
               variant="outlined"
               size="small"
-              label="Search users"
+              label="Search schedules"
               fullWidth
               name="search"
               value={searchValue}
@@ -172,7 +173,7 @@ function User() {
           </Grid>
           <Grid item xs={12} md={6} lg={4} sx={{ display: "flex", justifyContent: "flex-end" }}>
             <MKButton variant="contained" startIcon={<Add />} onClick={() => handleAddLab()}>
-              Add user
+              Add schedule
             </MKButton>
           </Grid>
         </Grid>
@@ -180,10 +181,12 @@ function User() {
           <TableBody>
             <TableRow component="th">
               <TableCell style={{ fontWeight: "bold" }}>#</TableCell>
-              <TableCell style={{ fontWeight: "bold" }}>Name</TableCell>
-              <TableCell style={{ fontWeight: "bold" }}>Email</TableCell>
+              <TableCell style={{ fontWeight: "bold" }}>Lab</TableCell>
+              <TableCell style={{ fontWeight: "bold" }}>Class</TableCell>
+              <TableCell style={{ fontWeight: "bold" }}>User</TableCell>
+              <TableCell style={{ fontWeight: "bold" }}>Date</TableCell>
               <TableCell style={{ fontWeight: "bold" }} align="center">
-                Gender
+                Time use
               </TableCell>
               <TableCell style={{ fontWeight: "bold" }} align="right" colSpan={3}>
                 Action
@@ -191,7 +194,7 @@ function User() {
             </TableRow>
           </TableBody>
           <TableBody>
-            {users.map((user, idx) => {
+            {schedules.map((user, idx) => {
               return (
                 <TableRow key={user.id}>
                   <TableCell>{idx + 1}</TableCell>
@@ -242,4 +245,4 @@ function User() {
   );
 }
 
-export default User;
+export default Schedule;

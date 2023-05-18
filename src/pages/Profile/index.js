@@ -9,11 +9,25 @@ import MKBox from "components/MKBox";
 import MKTypography from "components/MKTypography";
 
 // Images
+import { useEffect, useState } from "react";
+import api from "utils/api";
 import helper from "utils/helper";
+import { info } from "utils/path";
 
 function Profile() {
-  const user = JSON.parse(helper.getStorage("user"));
-  console.log(helper.getImageSource(user?.avatar));
+  const [user, setUser] = useState({});
+
+  useEffect(() => {
+    api.setJwtToken(helper.getCookie());
+    const res = api.get({ path: `${info}` });
+    res.then((response) => {
+      setUser(response.data?.data);
+      if (response.data?.data !== JSON.parse(helper.getStorage("user"))) {
+        helper.setStorage("user", JSON.stringify(response.data?.data));
+      }
+    });
+  }, []);
+
   return (
     <MKBox component="section" py={{ xs: 6, sm: 12 }}>
       <Container>

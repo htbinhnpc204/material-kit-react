@@ -14,9 +14,12 @@ import Presentation from "layouts/pages/presentation";
 
 // Material Kit 2 React routes
 import SignInPage from "layouts/pages/authentication/sign-in";
+import SignUpPage from "layouts/pages/authentication/signup";
+import ClassPage from "layouts/pages/class";
 import Computer from "layouts/pages/computer";
 import Lab from "layouts/pages/lab";
 import ProfilePage from "layouts/pages/profile";
+import SchedulePage from "layouts/pages/schedule";
 import User from "layouts/pages/user";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -51,9 +54,12 @@ export default function App() {
         <Route path="/" element={<Landing />} />
         <Route path="/labs" element={<Lab />} />
         <Route path="/users" element={<User />} />
+        <Route path="/classes" element={<ClassPage />} />
         <Route path="/computers" element={<Computer />} />
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/sign-in" element={<SignInPage />} />
+        <Route path="/sign-up" element={<SignUpPage />} />
+        <Route path="/schedules" element={<SchedulePage />} />
         <Route path="/presentation" element={<Presentation />} />
         {/* {getRoutes(routes)} */}
       </Routes>

@@ -4,10 +4,9 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 // @mui material components
-import { CircularProgress } from "@mui/material";
+import { Autocomplete, CircularProgress, TextField } from "@mui/material";
 import Card from "@mui/material/Card";
 import Grid from "@mui/material/Grid";
-import Switch from "@mui/material/Switch";
 
 // @mui icons
 
@@ -31,38 +30,43 @@ import { auth, info } from "utils/path";
 // Images
 import bgImage from "assets/images/bg-sign-in-basic.jpeg";
 
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-function SignInBasic() {
-  const [rememberMe, setRememberMe] = useState(false);
+function SignUpBasic() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [rePassword, setRePassword] = useState("");
   const [isLoading, setLoading] = useState(false);
+  const [gender, setGender] = useState({});
 
   const navigate = useNavigate();
-
-  const handleSetRememberMe = () => setRememberMe(!rememberMe);
 
   const handleInputChange = (e) => {
     if (e.target.name === "email") {
       setEmail(e.target.value);
-    } else {
+    } else if (e.target.name === "password") {
       setPassword(e.target.value);
+    } else {
+      setRePassword(e.target.value);
     }
   };
 
+  const handleGenderChange = (e, value) => {
+    setGender(value);
+  };
+
   const handleSubmit = () => {
-    if (rememberMe) {
-      localStorage.setItem("oldEmail", email);
-      localStorage.setItem("oldPassword", password);
+    if (password !== rePassword) {
+      toast.error("Password and re-password does not match !!");
+      return;
     }
 
     setLoading(true);
 
-    const payload = { email: email, password: password };
-    const loginRes = api.post({ path: auth.login, payload: payload });
-    loginRes
+    const payload = { email: email, password: password, gender: gender.key };
+    const registerRes = api.post({ path: auth.register, payload: payload });
+    registerRes
       .then((response) => {
         helper.setCookie(response.data.data.access_token);
         api.setJwtToken(helper.getCookie());
@@ -70,9 +74,14 @@ function SignInBasic() {
         infoRes
           .then((response) => {
             helper.setStorage("user", JSON.stringify(response.data?.data));
-            toast.success(`Welcome ${response.data?.data?.name}`, {
-              position: toast.POSITION.BOTTOM_LEFT,
-            });
+            toast.success(
+              `Register successfully, welcome ${
+                response.data?.data?.name || response.data?.data?.email
+              }`,
+              {
+                position: toast.POSITION.BOTTOM_LEFT,
+              }
+            );
 
             if (helper.getStorage("user")) {
               setLoading(false);
@@ -83,23 +92,29 @@ function SignInBasic() {
             setLoading(false);
           });
       })
-      .catch(() => {
+      .catch((error) => {
         setLoading(false);
-        toast.error(`Email or password is incorrect!!`, {
+        toast.error(`Register failed, ${error.data?.errors[0]?.message}`, {
           position: toast.POSITION.BOTTOM_LEFT,
         });
       });
   };
 
   useEffect(() => {
+    setGender(genderList[0]);
     if (JSON.parse(helper.getStorage("user"))) {
       navigate("/");
     }
   }, []);
 
+  const genderList = [
+    { value: "Nam", key: "NAM" },
+    { value: "Nữ", key: "NU" },
+    { value: "Other", key: "OTHER" },
+  ];
+
   return (
     <>
-      <ToastContainer />
       <DefaultNavbar routes={[]} transparent light />
       <MKBox
         position="absolute"
@@ -135,7 +150,7 @@ function SignInBasic() {
                 textAlign="center"
               >
                 <MKTypography variant="h4" fontWeight="medium" color="white" mt={1}>
-                  Sign in
+                  Sign Up
                 </MKTypography>
               </MKBox>
               <MKBox pt={4} pb={3} px={3}>
@@ -160,17 +175,35 @@ function SignInBasic() {
                       fullWidth
                     />
                   </MKBox>
-                  <MKBox display="flex" alignItems="center" ml={-1}>
-                    <Switch checked={rememberMe} onChange={handleSetRememberMe} />
-                    <MKTypography
-                      variant="button"
-                      fontWeight="regular"
-                      color="text"
-                      onClick={handleSetRememberMe}
-                      sx={{ cursor: "pointer", userSelect: "none", ml: -1 }}
-                    >
-                      &nbsp;&nbsp;Remember me
-                    </MKTypography>
+                  <MKBox mb={2}>
+                    <MKInput
+                      name="re-password"
+                      type="password"
+                      label="Re-enter Password"
+                      value={rePassword}
+                      onChange={handleInputChange}
+                      fullWidth
+                    />
+                  </MKBox>
+                  <MKBox mb={2}>
+                    <Autocomplete
+                      freeSolo
+                      id="gender"
+                      value={gender}
+                      options={genderList}
+                      getOptionLabel={(option) => option?.value}
+                      onChange={handleGenderChange}
+                      renderInput={(params) => (
+                        <TextField
+                          {...params}
+                          label="Gender"
+                          InputProps={{
+                            ...params.InputProps,
+                            type: "search",
+                          }}
+                        />
+                      )}
+                    />
                   </MKBox>
                   <MKBox mt={4} mb={1}>
                     <MKButton
@@ -191,16 +224,16 @@ function SignInBasic() {
                           size={"1rem"}
                         />
                       )}
-                      sign in
+                      sign up
                     </MKButton>
                   </MKBox>
                 </MKBox>
                 <MKBox mt={3} mb={1} textAlign="center">
                   <MKTypography variant="button" color="text">
-                    Don&apos;t have an account?{" "}
+                    Already had an account?{" "}
                     <MKTypography
                       component={Link}
-                      to="/sign-up"
+                      to="/sign-in"
                       variant="button"
                       color="info"
                       fontWeight="medium"
@@ -225,4 +258,4 @@ function SignInBasic() {
   );
 }
 
-export default SignInBasic;
+export default SignUpBasic;
