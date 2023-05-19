@@ -109,7 +109,7 @@ function ScheduleModal({ schedule, labs, classes, isOpen, onClose, onSubmit }) {
               value={_class}
               options={classes}
               getOptionLabel={(option) => option?.name}
-              onChange={handleLabChange}
+              onChange={handleClassChange}
               renderInput={(params) => (
                 <TextField
                   {...params}

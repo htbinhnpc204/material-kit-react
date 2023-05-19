@@ -145,7 +145,7 @@ function Lab() {
               onChange={handleSearchChange}
             />
           </Grid>
-          <Grid item xs={12} md={6} lg={4} sx={{ display: "flex", justifyContent: "flex-end" }}>
+          <Grid item xs={12} md={12} lg={4} sx={{ display: "flex", justifyContent: "flex-end" }}>
             <MKButton variant="contained" startIcon={<Add />} onClick={() => handleAddLab()}>
               Add lab
             </MKButton>

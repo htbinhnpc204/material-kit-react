@@ -23,6 +23,7 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 
 import "react-toastify/dist/ReactToastify.css";
 import { info } from "utils/path";
+import UserModalView from "./component/ModalView";
 import UserModal from "./component/UserModal";
 
 function User() {
@@ -32,6 +33,7 @@ function User() {
   const [searchValue, setSearchValue] = useState("");
   const [keyword, setKeyword] = useState("");
   const [openModal, setOpenModal] = useState(false);
+  const [isShowModalView, setShowModalView] = useState(false);
   const [selectedUser, setSelectedUser] = useState({});
   const [roles, setRoles] = useState([]);
 
@@ -50,6 +52,7 @@ function User() {
 
   const handleCloseModal = () => {
     setOpenModal(false);
+    setShowModalView(false);
   };
 
   const handleAddLab = () => {
@@ -63,9 +66,10 @@ function User() {
   };
 
   const handleSaveUser = (newUser) => {
+    console.log(newUser);
     const formData = new FormData();
     formData.append("email", newUser.email);
-    formData.append("student_id", newUser.studentId);
+    formData.append("studentId", newUser.studentId);
     formData.append("name", newUser.name);
     formData.append("dob", moment(newUser?.dob?.$d).toISOString());
     formData.append("phone", newUser.phone);
@@ -109,8 +113,9 @@ function User() {
     handleSearch(value);
   };
 
-  const handleView = (id) => {
-    console.log(id);
+  const handleView = (user) => {
+    setSelectedUser(user);
+    setShowModalView(true);
   };
 
   const handleDelete = (userDelete) => {
@@ -150,6 +155,7 @@ function User() {
 
   return (
     <>
+      <UserModalView user={selectedUser} isOpen={isShowModalView} onClose={handleCloseModal} />
       <UserModal
         user={selectedUser}
         roles={roles}
@@ -199,7 +205,12 @@ function User() {
                   <TableCell>{user.email}</TableCell>
                   <TableCell align="center">{user.gender}</TableCell>
                   <TableCell style={{ width: 10, padding: 0 }} align="center">
-                    <MKButton color="info" variant="text" size="small">
+                    <MKButton
+                      color="info"
+                      variant="text"
+                      size="small"
+                      onClick={() => handleView(user)}
+                    >
                       <VisibilityIcon />
                     </MKButton>
                   </TableCell>

@@ -35,7 +35,7 @@ function Profile() {
           <MKBox mt={{ xs: -20, md: -20 }} textAlign="center">
             <MKAvatar
               src={`${helper.getImageSource(user?.avatar)}`}
-              alt="Burce Mars"
+              alt={`${helper.getImageSource(user?.name || user?.email)}`}
               size="xxl"
               shadow="xl"
             />

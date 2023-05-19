@@ -20,6 +20,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 
+import moment from "moment";
 import ScheduleModal from "./component/ScheduleModal";
 
 function Schedule() {
@@ -60,40 +61,34 @@ function Schedule() {
     handleOpenModal();
   };
 
-  // const handleSaveUser = (newUser) => {
-  //   const formData = new FormData();
-  //   formData.append("email", newUser.email);
-  //   formData.append("student_id", newUser.studentId);
-  //   formData.append("name", newUser.name);
-  //   formData.append("dob", moment(newUser?.dob?.$d).toISOString());
-  //   formData.append("phone", newUser.phone);
-  //   formData.append("address", newUser.address);
-  //   formData.append("role", newUser.role);
-  //   formData.append("gender", newUser.gender);
-  //   newUser.avatar && formData.append("avatar", newUser.avatar);
+  const handleSaveSchedule = (newSchedule) => {
+    const formData = new FormData();
+    formData.append("lab_id", newSchedule.lab?.id);
+    formData.append("class_id", newSchedule._class?.id);
+    formData.append("time_start", moment(newSchedule?.timeStart?.$d).toISOString());
+    formData.append("time_use", newSchedule.timeUse);
 
-  //   if (newUser.id) {
-  //     formData.append("_method", "PUT");
-  //     api.setJwtToken(helper.getCookie());
-  //     const res = api.put({
-  //       path: `${schedulePath}/${newUser.id}`,
-  //       payload: formData,
-  //       isMultipart: true,
-  //     });
-  //     res.then(() => {
-  //       toast.success(`Updated ${newUser.name}!!!`);
-  //       fetchSchedules();
-  //     });
-  //   } else {
-  //     api.setJwtToken(helper.getCookie());
-  //     const res = api.post({ path: `${schedulePath}`, payload: formData, isMultipart: true });
-  //     res.then(() => {
-  //       toast.success(`Created ${newUser.name}!!!`);
-  //       fetchSchedules();
-  //     });
-  //   }
-  //   handleCloseModal();
-  // };
+    if (newSchedule.id) {
+      formData.append("_method", "PUT");
+      api.setJwtToken(helper.getCookie());
+      const res = api.put({
+        path: `${schedulePath}/${newSchedule.id}`,
+        payload: formData,
+      });
+      res.then(() => {
+        toast.success(`Updated ${newSchedule.name}!!!`);
+        fetchSchedules();
+      });
+    } else {
+      api.setJwtToken(helper.getCookie());
+      const res = api.post({ path: `${schedulePath}`, payload: formData });
+      res.then(() => {
+        toast.success(`Created ${newSchedule.name}!!!`);
+        fetchSchedules();
+      });
+    }
+    handleCloseModal();
+  };
 
   const handleSearchChange = (event) => {
     const value = event.target.value;
@@ -106,7 +101,7 @@ function Schedule() {
   };
 
   const handleDelete = (scheduleDel) => {
-    if (confirm(`Do you want to delete user ${scheduleDel.name || scheduleDel.email}`)) {
+    if (confirm(`Do you want to delete schedule ${scheduleDel.name || scheduleDel.email}`)) {
       api.setJwtToken(helper.getCookie());
       const res = api.delete({ path: `${schedulePath}/${scheduleDel.id}` });
       res.then(() => {
@@ -144,6 +139,7 @@ function Schedule() {
   useEffect(() => {
     if (helper.getCookie()) {
       fetchSchedules();
+      fetchClasses();
       fetchLabs();
     }
   }, [page, keyword]);
@@ -156,9 +152,9 @@ function Schedule() {
         labs={labs}
         isOpen={openModal}
         onClose={handleCloseModal}
-        // onSubmit={handleSaveUser}
+        onSubmit={handleSaveSchedule}
       />
-      <MKBox key={"users"}>
+      <MKBox key={"schedules"}>
         <Grid container spacing={2} sx={{ my: 4 }}>
           <Grid item xs={12} md={12} lg={8}>
             <MKInput
@@ -171,7 +167,7 @@ function Schedule() {
               onChange={handleSearchChange}
             />
           </Grid>
-          <Grid item xs={12} md={6} lg={4} sx={{ display: "flex", justifyContent: "flex-end" }}>
+          <Grid item xs={12} md={12} lg={4} sx={{ display: "flex", justifyContent: "flex-end" }}>
             <MKButton variant="contained" startIcon={<Add />} onClick={() => handleAddLab()}>
               Add schedule
             </MKButton>
@@ -183,7 +179,9 @@ function Schedule() {
               <TableCell style={{ fontWeight: "bold" }}>#</TableCell>
               <TableCell style={{ fontWeight: "bold" }}>Lab</TableCell>
               <TableCell style={{ fontWeight: "bold" }}>Class</TableCell>
-              <TableCell style={{ fontWeight: "bold" }}>User</TableCell>
+              <TableCell align="center" style={{ fontWeight: "bold" }}>
+                Scheduler
+              </TableCell>
               <TableCell style={{ fontWeight: "bold" }}>Date</TableCell>
               <TableCell style={{ fontWeight: "bold" }} align="center">
                 Time use
@@ -194,13 +192,21 @@ function Schedule() {
             </TableRow>
           </TableBody>
           <TableBody>
-            {schedules.map((user, idx) => {
+            {schedules.map((schedule, idx) => {
               return (
-                <TableRow key={user.id}>
+                <TableRow key={schedule.id}>
                   <TableCell>{idx + 1}</TableCell>
-                  <TableCell>{user.name}</TableCell>
-                  <TableCell>{user.email}</TableCell>
-                  <TableCell align="center">{user.gender}</TableCell>
+                  <TableCell>{schedule.lab?.name}</TableCell>
+                  <TableCell>{schedule.class_res?.name}</TableCell>
+                  <TableCell align="center">{schedule.register?.name}</TableCell>
+                  <TableCell>
+                    {schedule.time_start
+                      ? `${new Date(schedule.time_start).toDateString()} -- ${new Date(
+                          schedule.time_start
+                        ).toLocaleTimeString()}`
+                      : "Null"}
+                  </TableCell>
+                  <TableCell align="center">{schedule.time_use}</TableCell>
                   <TableCell style={{ width: 10, padding: 0 }} align="center">
                     <MKButton color="info" variant="text" size="small">
                       <VisibilityIcon />
@@ -211,7 +217,7 @@ function Schedule() {
                       color="success"
                       variant="text"
                       size="small"
-                      onClick={() => handleEdit(user)}
+                      onClick={() => handleEdit(schedule)}
                     >
                       <EditIcon />
                     </MKButton>
@@ -221,7 +227,7 @@ function Schedule() {
                       color="error"
                       variant="text"
                       size="small"
-                      onClick={() => handleDelete(user)}
+                      onClick={() => handleDelete(schedule)}
                     >
                       <DeleteIcon />
                     </MKButton>
