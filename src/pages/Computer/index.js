@@ -148,7 +148,7 @@ function Computer() {
             <MKInput
               variant="outlined"
               size="small"
-              label="Search computer"
+              label="Tìm kiếm máy tính"
               fullWidth
               value={searchValue}
               onChange={handleSearchChange}
@@ -156,7 +156,7 @@ function Computer() {
           </Grid>
           <Grid item xs={12} md={6} lg={4} sx={{ display: "flex", justifyContent: "flex-end" }}>
             <MKButton variant="contained" startIcon={<Add />} onClick={() => handleAddComputer()}>
-              Add computer
+              Thêm mới
             </MKButton>
           </Grid>
         </Grid>

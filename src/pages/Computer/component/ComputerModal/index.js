@@ -50,14 +50,14 @@ function LabModal({ computer, labs, isOpen, onClose, onSubmit }) {
 
   return (
     <Dialog open={isOpen} onClose={onClose}>
-      <DialogTitle>{lab ? "Edit Lab" : "Add Lab"}</DialogTitle>
+      <DialogTitle>{lab ? "Chỉnh sửa máy tính" : "Thêm mới máy tính"}</DialogTitle>
       <DialogContent>
         <MKBox mt={1} mb={2}>
-          <MKInput label="Name" fullWidth value={name} onChange={handleNameChange} />
+          <MKInput label="Tên" fullWidth value={name} onChange={handleNameChange} />
         </MKBox>
         <MKBox mb={2}>
           <MKInput
-            label="Description"
+            label="Mô tả"
             type="textarea"
             fullWidth
             value={description}
@@ -75,7 +75,7 @@ function LabModal({ computer, labs, isOpen, onClose, onSubmit }) {
             renderInput={(params) => (
               <TextField
                 {...params}
-                label="Lab"
+                label="Phòng máy"
                 InputProps={{
                   ...params.InputProps,
                   type: "search",
@@ -86,9 +86,9 @@ function LabModal({ computer, labs, isOpen, onClose, onSubmit }) {
         </MKBox>
       </DialogContent>
       <DialogActions>
-        <Button onClick={onClose}>Cancel</Button>
+        <Button onClick={onClose}>Hủy</Button>
         <Button onClick={handleSave} color="primary">
-          Save
+          Lưu
         </Button>
       </DialogActions>
     </Dialog>

@@ -80,15 +80,15 @@ function BaseLayout({ children }) {
       ],
     },
     {
-      name: `Hello, ${user?.name}`,
+      name: `Xin chào, ${user?.name}`,
       icon: <Icon>person</Icon>,
       collapse: [
         {
-          name: "Profile",
+          name: "Trang cá nhân",
           route: "/profile",
         },
         {
-          name: "Logout",
+          name: "Đăng xuất",
           onClick: handleLogout,
         },
       ],
@@ -97,7 +97,7 @@ function BaseLayout({ children }) {
 
   return (
     <>
-      <DefaultNavbar brand={"UTELab"} routes={user ? auth : routes} sticky />
+      <DefaultNavbar brand={"Quản lý phòng máy UTE"} routes={user ? auth : routes} sticky />
       <MKBox
         minHeight="75vh"
         width="100%"
@@ -122,7 +122,7 @@ function BaseLayout({ children }) {
                 },
               })}
             >
-              UTE Computer Lab{" "}
+              UTE Lab Management{" "}
             </MKTypography>
             <MKTypography
               variant="body1"
@@ -131,7 +131,9 @@ function BaseLayout({ children }) {
               px={{ xs: 6, lg: 12 }}
               mt={1}
             >
-              Support to inspect the schedule and book calendar to use the lab room.
+              Hệ thống quản lý phòng máy cho trường Đại học Sư phạm Kỹ thuật UTE, hỗ trợ sinh viên
+              và giảng viên xem thời khóa biểu học tập, quản lý thông tin các phòng máy, hỗ trợ đặt
+              lịch sử dụng phòng máy.
             </MKTypography>
           </Grid>
         </Container>
