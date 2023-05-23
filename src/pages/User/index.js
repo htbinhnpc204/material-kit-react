@@ -101,7 +101,7 @@ function User() {
       api.setJwtToken(helper.getCookie());
       const res = api.post({ path: `${userPath}`, payload: formData, isMultipart: true });
       res.then(() => {
-        toast.success(`Created ${newUser.name}!!!`);
+        toast.success(`Tạo mới thành công, ${newUser.name}!!!`);
         fetchUsers();
       });
     }
@@ -120,11 +120,11 @@ function User() {
   };
 
   const handleDelete = (userDelete) => {
-    if (confirm(`Do you want to delete user ${userDelete.name || userDelete.email}`)) {
+    if (confirm(`xác nhận xóa người dùng ${userDelete.name || userDelete.email}`)) {
       api.setJwtToken(helper.getCookie());
       const res = api.delete({ path: `${userPath}/${userDelete.id}` });
       res.then(() => {
-        toast.success(`Deleted ${userDelete.name}!!!`);
+        toast.success(`Xóa thành công ${userDelete.name}!!!`);
         fetchUsers();
       });
     }
@@ -154,6 +154,12 @@ function User() {
     }
   }, [page, keyword]);
 
+  const genderList = [
+    { value: "Nam", key: "NAM" },
+    { value: "Nữ", key: "NU" },
+    { value: "Other", key: "OTHER" },
+  ];
+
   return (
     <>
       <UserModalView user={selectedUser} isOpen={isShowModalView} onClose={handleCloseModal} />
@@ -170,7 +176,7 @@ function User() {
             <MKInput
               variant="outlined"
               size="small"
-              label="Search users"
+              label="Tìm kiếm người dùng"
               fullWidth
               name="search"
               value={searchValue}
@@ -179,7 +185,7 @@ function User() {
           </Grid>
           <Grid item xs={12} md={4} lg={4} sx={{ display: "flex", justifyContent: "flex-end" }}>
             <MKButton variant="contained" startIcon={<Add />} onClick={() => handleAddLab()}>
-              Add user
+              Thêm mới
             </MKButton>
           </Grid>
         </Grid>
@@ -187,13 +193,13 @@ function User() {
           <TableBody>
             <TableRow component="th">
               <TableCell style={{ fontWeight: "bold" }}>#</TableCell>
-              <TableCell style={{ fontWeight: "bold" }}>Name</TableCell>
+              <TableCell style={{ fontWeight: "bold" }}>Họ tên</TableCell>
               <TableCell style={{ fontWeight: "bold" }}>Email</TableCell>
               <TableCell style={{ fontWeight: "bold" }} align="center">
-                Gender
+                Giới tính
               </TableCell>
               <TableCell style={{ fontWeight: "bold" }} align="right" colSpan={3}>
-                Action
+                Hành động
               </TableCell>
             </TableRow>
           </TableBody>
@@ -204,7 +210,9 @@ function User() {
                   <TableCell>{idx + 1}</TableCell>
                   <TableCell>{user.name}</TableCell>
                   <TableCell>{user.email}</TableCell>
-                  <TableCell align="center">{user.gender}</TableCell>
+                  <TableCell align="center">
+                    {genderList.find((g) => g.key === user.gender)?.value}
+                  </TableCell>
                   <TableCell style={{ width: 10, padding: 0 }} align="center">
                     <MKButton
                       color="info"
@@ -238,7 +246,7 @@ function User() {
                 </TableRow>
               );
             })}
-            {users.length === 0 && <Typography variant="h3">There are no student total</Typography>}
+            {users.length === 0 && <Typography variant="h5">Không có người dùng nào</Typography>}
           </TableBody>
         </Table>
         <MKBox display="flex" justifyContent="center" mt={3}>

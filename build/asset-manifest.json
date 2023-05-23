@@ -1,23 +1,23 @@
 {
   "files": {
     "main.css": "/static/css/main.98ec47ca.css",
-    "main.js": "/static/js/main.c8e90c90.js",
+    "main.js": "/static/js/main.16753ff2.js",
     "static/media/rotating-card-bg-front.jpeg": "/static/media/rotating-card-bg-front.bdcdfadc0dacb9bc5f23.jpeg",
     "static/media/bg-sign-in-basic.jpeg": "/static/media/bg-sign-in-basic.f327db1d0e4b00ba3c81.jpeg",
     "static/media/rotating-card-bg-back.jpeg": "/static/media/rotating-card-bg-back.183088de91adb283a9ae.jpeg",
-    "static/media/waves-white.svg": "/static/media/waves-white.7e7579c6e93ead70064fb4e8dd899f32.svg",
+    "static/media/waves-white.svg": "/static/media/waves-white.dcb2ce8579b019d0f73a64c138dae945.svg",
     "static/media/bg-presentation.jpg": "/static/media/bg-presentation.d9ba2bdbf6a0f44fcaad.jpg",
-    "static/media/logo-digitalocean.svg": "/static/media/logo-digitalocean.a1f147b01387952368e3180edf221c96.svg",
-    "static/media/logo-vodafone.svg": "/static/media/logo-vodafone.b3e8486c0cac220bc3a31c9eab049b21.svg",
-    "static/media/logo-facebook.svg": "/static/media/logo-facebook.106d2ac0ece089e3c6def0a36c283ef7.svg",
-    "static/media/logo-apple.svg": "/static/media/logo-apple.f9c2682e61da98dfbc703a4dccd0d064.svg",
-    "static/media/logo-nasa.svg": "/static/media/logo-nasa.c5d11f8820bfde5fd64db0074156e06c.svg",
+    "static/media/logo-digitalocean.svg": "/static/media/logo-digitalocean.2a34c59e2d333aeeaef95fd474297765.svg",
+    "static/media/logo-vodafone.svg": "/static/media/logo-vodafone.64bd2eee2378660390ef68598cd9220c.svg",
+    "static/media/logo-facebook.svg": "/static/media/logo-facebook.628f2a8a471009dffecd3ea2745e37b0.svg",
+    "static/media/logo-apple.svg": "/static/media/logo-apple.1098fa39e472270297c7c8a2dce460ad.svg",
+    "static/media/logo-nasa.svg": "/static/media/logo-nasa.b4e79ad93e48f27643c48621609ba18b.svg",
     "index.html": "/index.html",
     "main.98ec47ca.css.map": "/static/css/main.98ec47ca.css.map",
-    "main.c8e90c90.js.map": "/static/js/main.c8e90c90.js.map"
+    "main.16753ff2.js.map": "/static/js/main.16753ff2.js.map"
   },
   "entrypoints": [
     "static/css/main.98ec47ca.css",
-    "static/js/main.c8e90c90.js"
+    "static/js/main.16753ff2.js"
   ]
 }

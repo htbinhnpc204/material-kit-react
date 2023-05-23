@@ -117,11 +117,11 @@ function UserModal({ user, roles, isOpen, onClose, onSubmit }) {
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <Dialog open={isOpen} onClose={onClose}>
-        <DialogTitle>{user ? "Edit user" : "Add user"}</DialogTitle>
+        <DialogTitle>{user ? "Chỉnh sửa thông tin người dùng" : "Thêm mới"}</DialogTitle>
         <DialogContent>
           <MKBox mt={1} mb={2}>
             <MKInput
-              label="Student ID"
+              label="Mã sinh viên"
               fullWidth
               value={studentId}
               onChange={handleStudentIdChange}
@@ -131,13 +131,13 @@ function UserModal({ user, roles, isOpen, onClose, onSubmit }) {
             <MKInput label="Email" fullWidth value={email} onChange={handleEmailChange} />
           </MKBox>
           <MKBox mb={2}>
-            <MKInput label="Name" fullWidth value={name} onChange={handleNameChange} />
+            <MKInput label="Họ tên" fullWidth value={name} onChange={handleNameChange} />
           </MKBox>
           <MKBox mb={2}>
-            <MKInput label="Phone" fullWidth value={phone} onChange={handlePhoneChange} />
+            <MKInput label="Số điện thoại" fullWidth value={phone} onChange={handlePhoneChange} />
           </MKBox>
           <MKBox mb={2}>
-            <MKInput label="Address" fullWidth value={address} onChange={handleAddressChange} />
+            <MKInput label="Địa chỉ" fullWidth value={address} onChange={handleAddressChange} />
           </MKBox>
           <MKBox mb={2}>
             <Autocomplete
@@ -150,7 +150,7 @@ function UserModal({ user, roles, isOpen, onClose, onSubmit }) {
               renderInput={(params) => (
                 <TextField
                   {...params}
-                  label="Gender"
+                  label="Giới tính"
                   InputProps={{
                     ...params.InputProps,
                     type: "search",
@@ -170,7 +170,7 @@ function UserModal({ user, roles, isOpen, onClose, onSubmit }) {
               renderInput={(params) => (
                 <TextField
                   {...params}
-                  label="Role"
+                  label="Phân quyền"
                   InputProps={{
                     ...params.InputProps,
                     type: "search",
@@ -180,16 +180,16 @@ function UserModal({ user, roles, isOpen, onClose, onSubmit }) {
             />
           </MKBox>
           <MKBox mb={2}>
-            <DatePicker label="Date of Birth" value={dob} onChange={handleDobChange} format="LL" />
+            <DatePicker label="Ngày sinh" value={dob} onChange={handleDobChange} format="LL" />
           </MKBox>
           <MKBox mb={2}>
-            <Input type="file" label="Avatar" id="avatar" onChange={handleAvatarChange} />
+            <Input type="file" label="Ânhr đại diện" id="avatar" onChange={handleAvatarChange} />
           </MKBox>
         </DialogContent>
         <DialogActions>
-          <Button onClick={onClose}>Cancel</Button>
+          <Button onClick={onClose}>Hủy</Button>
           <Button onClick={handleSave} color="primary">
-            Save
+            {user ? "Lưu" : "Thêm"}
           </Button>
         </DialogActions>
       </Dialog>
