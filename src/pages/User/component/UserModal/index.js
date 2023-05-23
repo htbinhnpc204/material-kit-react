@@ -69,7 +69,7 @@ function UserModal({ user, roles, isOpen, onClose, onSubmit }) {
   const refreshState = () => {
     setEmail(user?.email || "");
     setName(user?.name || "");
-    setStudentId(user?.studentId || "");
+    setStudentId(user?.student_id || "");
     setAddress(user?.address || "");
     setPhone(user?.phone || "");
     setRole(user?.role || null);

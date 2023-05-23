@@ -200,6 +200,11 @@ function Lab() {
               </Card>
             </Grid>
           ))}
+          {labs.length === 0 && (
+            <Typography variant="h3" ml={2}>
+              There are no lab total
+            </Typography>
+          )}
         </Grid>
         <MKBox display="flex" justifyContent="center" mt={3}>
           <Pagination

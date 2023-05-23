@@ -25,6 +25,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { info } from "utils/path";
 import UserModalView from "./component/ModalView";
 import UserModal from "./component/UserModal";
+import Typography from "layouts/sections/elements/typography";
 
 function User() {
   const [users, setUsers] = useState([]);
@@ -165,7 +166,7 @@ function User() {
       />
       <MKBox key={"users"}>
         <Grid container spacing={2} sx={{ my: 4 }}>
-          <Grid item xs={12} md={12} lg={8}>
+          <Grid item xs={12} md={8} lg={8}>
             <MKInput
               variant="outlined"
               size="small"
@@ -176,7 +177,7 @@ function User() {
               onChange={handleSearchChange}
             />
           </Grid>
-          <Grid item xs={12} md={6} lg={4} sx={{ display: "flex", justifyContent: "flex-end" }}>
+          <Grid item xs={12} md={4} lg={4} sx={{ display: "flex", justifyContent: "flex-end" }}>
             <MKButton variant="contained" startIcon={<Add />} onClick={() => handleAddLab()}>
               Add user
             </MKButton>
@@ -237,6 +238,7 @@ function User() {
                 </TableRow>
               );
             })}
+            {users.length === 0 && <Typography variant="h3">There are no student total</Typography>}
           </TableBody>
         </Table>
         <MKBox display="flex" justifyContent="center" mt={3}>
