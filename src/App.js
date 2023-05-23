@@ -7,15 +7,14 @@ import { Route, Routes, useLocation } from "react-router-dom";
 import CssBaseline from "@mui/material/CssBaseline";
 import { ThemeProvider } from "@mui/material/styles";
 
-// Material Kit 2 React themes
 import theme from "assets/theme";
 import Landing from "layouts/pages/landing";
 import Presentation from "layouts/pages/presentation";
 
-// Material Kit 2 React routes
 import SignInPage from "layouts/pages/authentication/sign-in";
 import SignUpPage from "layouts/pages/authentication/signup";
 import ClassPage from "layouts/pages/class";
+import ClassDetailPage from "layouts/pages/class/detail";
 import Computer from "layouts/pages/computer";
 import Lab from "layouts/pages/lab";
 import ProfilePage from "layouts/pages/profile";
@@ -29,22 +28,10 @@ export default function App() {
 
   // Setting page scroll to 0 when changing the route
   useEffect(() => {
+    console.log(pathname);
     document.documentElement.scrollTop = 0;
     document.scrollingElement.scrollTop = 0;
   }, [pathname]);
-
-  // const getRoutes = (allRoutes) =>
-  //   allRoutes.map((route) => {
-  //     if (route.collapse) {
-  //       return getRoutes(route.collapse);
-  //     }
-
-  //     if (route.route) {
-  //       return <Route exact path={route.route} element={route.component} key={route.key} />;
-  //     }
-
-  //     return null;
-  //   });
 
   return (
     <ThemeProvider theme={theme}>
@@ -55,13 +42,13 @@ export default function App() {
         <Route path="/labs" element={<Lab />} />
         <Route path="/users" element={<User />} />
         <Route path="/classes" element={<ClassPage />} />
+        <Route path="/classes/:id" element={<ClassDetailPage />} />
         <Route path="/computers" element={<Computer />} />
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/sign-in" element={<SignInPage />} />
         <Route path="/sign-up" element={<SignUpPage />} />
         <Route path="/schedules" element={<SchedulePage />} />
         <Route path="/presentation" element={<Presentation />} />
-        {/* {getRoutes(routes)} */}
       </Routes>
     </ThemeProvider>
   );

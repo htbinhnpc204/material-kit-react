@@ -7,6 +7,8 @@ export const labs = "/labs";
 
 export const classes = "/classes";
 
+export const classUsers = (classId) => `/class/${classId}/users`;
+
 export const users = "/users";
 
 export const computers = "/computers";

@@ -71,11 +71,11 @@ function User() {
     formData.append("email", newUser.email);
     formData.append("studentId", newUser.studentId);
     formData.append("name", newUser.name);
-    formData.append("dob", moment(newUser?.dob?.$d).toISOString());
     formData.append("phone", newUser.phone);
     formData.append("address", newUser.address);
     formData.append("role", newUser.role);
     formData.append("gender", newUser.gender);
+    newUser.dob && formData.append("dob", moment(newUser?.dob?.$d).toISOString());
     newUser.avatar && formData.append("avatar", newUser.avatar);
 
     if (newUser.id) {

@@ -20,6 +20,7 @@ import { classes as classPath } from "utils/path";
 import api from "utils/api";
 import helper from "utils/helper";
 
+import { useNavigate } from "react-router-dom";
 import "react-toastify/dist/ReactToastify.css";
 
 function Class() {
@@ -29,6 +30,7 @@ function Class() {
   const [pagination, setPagination] = useState({});
   const [searchValue, setSearchValue] = useState("");
   const [keyword, setKeyword] = useState("");
+  const navigate = useNavigate();
 
   const handleSearch = useCallback(
     debounce((value) => {
@@ -82,7 +84,7 @@ function Class() {
   };
 
   const handleView = (id) => {
-    console.log(id);
+    navigate(`${id}`);
   };
 
   const handleDelete = (delCom) => {
