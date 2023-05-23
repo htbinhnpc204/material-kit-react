@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import Card from "@mui/material/Card";
 import Grid from "@mui/material/Grid";
 import Pagination from "@mui/material/Pagination";
@@ -9,14 +8,11 @@ import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 
 import MKBox from "components/MKBox";
 import MKButton from "components/MKButton";
-import MKInput from "components/MKInput";
 
 import { Add } from "@mui/icons-material";
 import { Autocomplete, CardContent, CardHeader, TextField, Typography } from "@mui/material";
-import { debounce } from "lodash";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import { labs as labPath } from "utils/path";
 
 import api from "utils/api";
 import helper from "utils/helper";
@@ -32,25 +28,8 @@ function ClassDetail() {
   const [users, setUsers] = useState([]);
   const [page, setPage] = useState(1);
   const [pagination, setPagination] = useState({});
-  const [searchValue, setSearchValue] = useState("");
-  const [keyword, setKeyword] = useState("");
   const [role, setRole] = useState(null);
   const [user, setUser] = useState(null);
-
-  const handleSearch = useCallback(
-    debounce((value) => {
-      value = value.trim();
-      setKeyword(value);
-      setSearchValue(value);
-    }, 1000),
-    []
-  );
-
-  const handleSearchChange = (event) => {
-    const value = event.target.value;
-    setSearchValue(value);
-    handleSearch(value);
-  };
 
   const handleView = (id) => {
     console.log(id);
@@ -58,7 +37,7 @@ function ClassDetail() {
 
   const fetchUsers = () => {
     api.setJwtToken(helper.getCookie());
-    const res = api.get({ path: `${classUsers(id)}?page=${page}&keyword=${keyword}` });
+    const res = api.get({ path: `${classUsers(id)}?page=${page}` });
     res.then((response) => {
       setClassUser(response.data?.data?.items);
       setPagination(response.data?.data?.pagination);
@@ -73,28 +52,22 @@ function ClassDetail() {
     });
   };
 
-  const handleAddUserToClass = (newLab) => {
-    const formData = new FormData();
-    formData.append("user_id", newLab.name);
-    if (newLab.id) {
-      formData.append("_method", "PUT");
-      api.setJwtToken(helper.getCookie());
-      const res = api.put({
-        path: `${labPath}/${newLab.id}`,
-        payload: formData,
-      });
-      res.then(() => {
-        toast.success(`Updated ${newLab.name}!!!`);
-        fetchUsers();
-      });
-    } else {
-      api.setJwtToken(helper.getCookie());
-      const res = api.post({ path: `${labPath}`, payload: formData });
-      res.then(() => {
-        toast.success(`Created ${newLab.name}!!!`);
-        fetchUsers();
-      });
+  const handleAddUserToClass = () => {
+    if (!user || !role) {
+      toast.error("Hãy chọn người dùng và chức danh trước khi thêm!!");
+      return;
     }
+    const formData = new FormData();
+    formData.append("user_id", user.id);
+    formData.append("role", role.key);
+    api.setJwtToken(helper.getCookie());
+    const res = api.post({ path: `${classUsers(_class.id)}`, payload: formData });
+    res.then(() => {
+      setUser(null);
+      setRole(null);
+      toast.success(`Thêm ${user.name} vào lớp thành công!!!`);
+      fetchUsers();
+    });
   };
 
   const fetchClassDetails = () => {
@@ -109,13 +82,13 @@ function ClassDetail() {
       });
   };
 
-  const handleDelete = (labDelete) => {
-    console.log(labDelete);
-    if (confirm(`Do you want to delete lab ${labDelete.name}`)) {
+  const handleDelete = (userDel) => {
+    console.log(userDel);
+    if (confirm(`Bạn có muốn xóa sinh viên ${userDel.name} ra khỏi lớp`)) {
       api.setJwtToken(helper.getCookie());
-      const res = api.delete({ path: `${labPath}/${labDelete.id}` });
+      const res = api.delete({ path: `${classUsers(_class.id)}/${userDel.id}` });
       res.then(() => {
-        toast.success(`Deleted ${labDelete.name}!!!`);
+        toast.success(`Đã xóa ${userDel.name} khỏi lớp!!!`);
         fetchUsers();
       });
     }
@@ -132,7 +105,7 @@ function ClassDetail() {
     if (helper.getCookie()) {
       fetchUsers();
     }
-  }, [page, keyword]);
+  }, [page]);
 
   const roles = [
     { key: "GIANG_VIEN", value: "Giảng viên" },
@@ -145,14 +118,14 @@ function ClassDetail() {
     <>
       <MKBox key={"labs"}>
         <Grid container spacing={2} sx={{ my: 4 }}>
-          <Grid item xs={12} md={3} lg={3}>
+          <Grid item xs={12} md={4} lg={4}>
             <Typography variant="h3">Lớp: {_class?.name}</Typography>
           </Grid>
           <Grid
             item
             xs={12}
-            md={9}
-            lg={9}
+            md={8}
+            lg={8}
             sx={{ display: "flex", justifyContent: "flex-end", gap: 1, alignItems: "center" }}
           >
             <Grid item xs={6} md={9} lg={9}>
@@ -176,7 +149,7 @@ function ClassDetail() {
                 )}
               />
             </Grid>
-            <Grid item xs={6} md={3} lg={3}>
+            <Grid item xs={6} md={6} lg={3}>
               <Autocomplete
                 freeSolo
                 id="role"
@@ -197,21 +170,13 @@ function ClassDetail() {
                 )}
               />
             </Grid>
-            <Grid item xs={6} md={3} lg={3}>
-              <MKButton variant="contained" startIcon={<Add />}>
-                Thêm sinh viên
-              </MKButton>
-            </Grid>
-          </Grid>
-          <Grid item xs={12} md={12} lg={12}>
-            <MKInput
-              variant="outlined"
-              size="small"
-              label="Search labs"
-              fullWidth
-              value={searchValue}
-              onChange={handleSearchChange}
-            />
+            <MKButton
+              variant="contained"
+              startIcon={<Add />}
+              onClick={() => handleAddUserToClass()}
+            >
+              Thêm
+            </MKButton>
           </Grid>
         </Grid>
         <Grid container spacing={2}>
@@ -220,7 +185,9 @@ function ClassDetail() {
               <Card sx={{ height: "250px" }}>
                 <CardHeader title={clsUser.user.name} />
                 <CardContent>
-                  <Typography variant="body2">Chức danh: {clsUser.role}</Typography>
+                  <Typography variant="body2">
+                    Chức danh: {roles.find((obj) => obj.key === clsUser.role)?.value}
+                  </Typography>
                 </CardContent>
                 <MKBox
                   style={{
@@ -252,7 +219,7 @@ function ClassDetail() {
                     color="primary"
                     variant="text"
                     size="small"
-                    onClick={() => handleDelete(clsUser)}
+                    onClick={() => handleDelete(clsUser.user)}
                   >
                     Delete
                   </MKButton>
