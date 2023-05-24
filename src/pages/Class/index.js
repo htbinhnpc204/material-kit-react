@@ -43,13 +43,13 @@ function Class() {
 
   const handleAddClass = () => {
     if (newClassName.trim().length == 0) {
-      toast.error("Class name must not be null");
+      toast.error("Tên lớp không được để trống");
       return;
     }
     api.setJwtToken(helper.getCookie());
     const res = api.post({ path: `${classPath}`, payload: { name: newClassName } });
     res.then(() => {
-      toast.success(`Created ${newClassName}!!!`);
+      toast.success(`Tạo thành công, ${newClassName}!!!`);
       fetchComputers();
     });
   };
@@ -67,7 +67,7 @@ function Class() {
         payload: formData,
       });
       res.then(() => {
-        toast.success(`Updated ${newClass.name}!!!`);
+        toast.success(`Đã cập nhât lớp ${newClass.name}!!!`);
         fetchComputers();
       });
     }
@@ -87,12 +87,12 @@ function Class() {
     navigate(`${id}`);
   };
 
-  const handleDelete = (delCom) => {
-    if (confirm(`Do you want to delete ${delCom.name}`)) {
+  const handleDelete = (delClass) => {
+    if (confirm(`Bán có muốn xóa lớp ${delClass.name}`)) {
       api.setJwtToken(helper.getCookie());
-      const res = api.delete({ path: `${classPath}/${delCom.id}` });
+      const res = api.delete({ path: `${classPath}/${delClass.id}` });
       res.then(() => {
-        toast.success(`Deleted ${delCom.name}!!!`);
+        toast.success(`Đã xóa lớp ${delClass.name}!!!`);
         fetchComputers();
       });
     }
@@ -121,7 +121,7 @@ function Class() {
             <MKInput
               variant="outlined"
               size="small"
-              label="Search class"
+              label="Tìm kiếm lớp học"
               fullWidth
               value={searchValue}
               onChange={handleSearchChange}
@@ -139,7 +139,7 @@ function Class() {
               <MKInput
                 variant="outlined"
                 size="small"
-                label="New class name"
+                label="Tên lớp"
                 fullWidth
                 value={newClassName}
                 onChange={handleNewClassNameChange}
@@ -152,7 +152,7 @@ function Class() {
                 startIcon={<Add />}
                 onClick={() => handleAddClass()}
               >
-                Add class
+                Thêm mới
               </MKButton>
             </Grid>
           </Grid>

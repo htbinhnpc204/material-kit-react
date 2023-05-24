@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/static/css/main.98ec47ca.css",
-    "main.js": "/static/js/main.e94190d6.js",
+    "main.js": "/static/js/main.aa14465c.js",
     "static/media/rotating-card-bg-front.jpeg": "/static/media/rotating-card-bg-front.bdcdfadc0dacb9bc5f23.jpeg",
     "static/media/bg-sign-in-basic.jpeg": "/static/media/bg-sign-in-basic.f327db1d0e4b00ba3c81.jpeg",
     "static/media/rotating-card-bg-back.jpeg": "/static/media/rotating-card-bg-back.183088de91adb283a9ae.jpeg",
@@ -14,10 +14,10 @@
     "static/media/logo-nasa.svg": "/static/media/logo-nasa.b4e79ad93e48f27643c48621609ba18b.svg",
     "index.html": "/index.html",
     "main.98ec47ca.css.map": "/static/css/main.98ec47ca.css.map",
-    "main.e94190d6.js.map": "/static/js/main.e94190d6.js.map"
+    "main.aa14465c.js.map": "/static/js/main.aa14465c.js.map"
   },
   "entrypoints": [
     "static/css/main.98ec47ca.css",
-    "static/js/main.e94190d6.js"
+    "static/js/main.aa14465c.js"
   ]
 }

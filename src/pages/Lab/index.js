@@ -74,14 +74,14 @@ function Lab() {
         payload: formData,
       });
       res.then(() => {
-        toast.success(`Updated ${newLab.name}!!!`);
+        toast.success(`Cập nhật thành công ${newLab.name}!!!`);
         fetchLabs();
       });
     } else {
       api.setJwtToken(helper.getCookie());
       const res = api.post({ path: `${labPath}`, payload: formData });
       res.then(() => {
-        toast.success(`Created ${newLab.name}!!!`);
+        toast.success(`Thêm mới thành công ${newLab.name}!!!`);
         fetchLabs();
       });
     }
@@ -100,11 +100,11 @@ function Lab() {
 
   const handleDelete = (labDelete) => {
     console.log(labDelete);
-    if (confirm(`Do you want to delete lab ${labDelete.name}`)) {
+    if (confirm(`Xác nhận xóa phòng máy ${labDelete.name}`)) {
       api.setJwtToken(helper.getCookie());
       const res = api.delete({ path: `${labPath}/${labDelete.id}` });
       res.then(() => {
-        toast.success(`Deleted ${labDelete.name}!!!`);
+        toast.success(`Đã xóa ${labDelete.name}!!!`);
         fetchLabs();
       });
     }
@@ -139,7 +139,7 @@ function Lab() {
             <MKInput
               variant="outlined"
               size="small"
-              label="Search labs"
+              label="Tìm kiếm phòng máy"
               fullWidth
               value={searchValue}
               onChange={handleSearchChange}
@@ -147,7 +147,7 @@ function Lab() {
           </Grid>
           <Grid item xs={12} md={12} lg={4} sx={{ display: "flex", justifyContent: "flex-end" }}>
             <MKButton variant="contained" startIcon={<Add />} onClick={() => handleAddLab()}>
-              Add lab
+              Thêm mới
             </MKButton>
           </Grid>
         </Grid>
@@ -157,8 +157,8 @@ function Lab() {
               <Card sx={{ height: "250px" }}>
                 <CardHeader title={lab.name} />
                 <CardContent>
-                  <Typography variant="body2">Managed by: {lab.manager.name}</Typography>
-                  <Typography variant="body2">Computers: {lab.computers?.length}</Typography>
+                  <Typography variant="body2">Quản lý bởi: {lab.manager.name}</Typography>
+                  <Typography variant="body2">Số lượng máy: {lab.computers?.length}</Typography>
                   <Typography variant="body1">{lab.description}</Typography>
                 </CardContent>
                 <MKBox
@@ -202,7 +202,7 @@ function Lab() {
           ))}
           {labs.length === 0 && (
             <Typography variant="h3" ml={2}>
-              There are no lab total
+              Không có phòng máy nào
             </Typography>
           )}
         </Grid>
