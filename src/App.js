@@ -21,9 +21,9 @@ import User from "layouts/pages/user";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { PrivateRoute } from "components/PrivateRoute";
-import { AuthProvider } from "components/AuthContext/authContext";
 import helper from "utils/helper";
 import { AuthContext } from "components/AuthContext/authContext";
+import LoadingFullSize from "components/Loading/fullSize";
 
 export default function App() {
   const { pathname } = useLocation();

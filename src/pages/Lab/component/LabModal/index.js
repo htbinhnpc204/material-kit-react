@@ -66,7 +66,7 @@ function LabModal({ lab, isOpen, onClose, onSubmit }) {
   }, [isOpen]);
 
   return (
-    <Dialog open={isOpen} onClose={onClose}>
+    <Dialog fullWidth open={isOpen} onClose={onClose}>
       <DialogTitle>{lab ? "Edit Lab" : "Add Lab"}</DialogTitle>
       <DialogContent>
         <MKBox mt={1} mb={2}>

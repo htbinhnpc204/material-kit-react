@@ -18,7 +18,6 @@ import DefaultNavbar from "examples/Navbars/DefaultNavbar";
 
 // Routes
 import footerRoutes from "footer.routes";
-import routes from "routes";
 
 // Images
 import bgImage from "assets/images/bg-presentation.jpg";
@@ -29,10 +28,12 @@ import { Icon } from "@mui/material";
 import { toast } from "react-toastify";
 import helper from "utils/helper";
 import { AuthContext } from "components/AuthContext/authContext";
+import LoadingFullSize from "components/Loading/fullSize";
+import routes from "routes";
 
 function BaseLayout({ children }) {
-  const [user, setUser] = useState({});
   const userFromStorage = JSON.parse(helper.getStorage("user"));
+  const [user, setUser] = useState({});
   const { logout } = useContext(AuthContext);
 
   useEffect(() => {
@@ -41,7 +42,7 @@ function BaseLayout({ children }) {
     } else {
       helper.removeStorage("user");
       setUser(null);
-      toast.error("Session expired!!");
+      toast.error("Phiên đăng nhập hết hạn");
     }
   }, []);
 
@@ -49,7 +50,22 @@ function BaseLayout({ children }) {
     logout();
   };
 
-  const auth = [
+  const defaultAuthRoute = {
+    name: `Xin chào, ${user?.name}`,
+    icon: <Icon>person</Icon>,
+    collapse: [
+      {
+        name: "Trang cá nhân",
+        route: "/profile",
+      },
+      {
+        name: "Đăng xuất",
+        onClick: handleLogout,
+      },
+    ],
+  };
+
+  const adminRoute = [
     {
       name: "Chức năng",
       icon: <Icon>settings</Icon>,
@@ -76,25 +92,43 @@ function BaseLayout({ children }) {
         },
       ],
     },
-    {
-      name: `Xin chào, ${user?.name}`,
-      icon: <Icon>person</Icon>,
-      collapse: [
-        {
-          name: "Trang cá nhân",
-          route: "/profile",
-        },
-        {
-          name: "Đăng xuất",
-          onClick: handleLogout,
-        },
-      ],
-    },
+    defaultAuthRoute,
   ];
+
+  const gvRoute = [
+    {
+      name: `Đặt lịch sử dụng phòng máy`,
+      icon: <Icon>person</Icon>,
+    },
+    defaultAuthRoute,
+  ];
+
+  const userRoute = [
+    {
+      name: `Xem thời khóa biểu`,
+      icon: <Icon>person</Icon>,
+    },
+    defaultAuthRoute,
+  ];
+
+  const getRoute = () => {
+    console.log(user?.role?.name);
+    switch (user?.role?.name) {
+      case "ROLE_GIANG_VIEN":
+        return gvRoute;
+      case "ROLE_QUAN_TRI":
+        return adminRoute;
+      case "ROLE_SINH_VIEN":
+        return userRoute;
+      default:
+        return routes;
+    }
+  };
 
   return (
     <>
-      <DefaultNavbar brand={"Quản lý phòng máy UTE"} routes={user ? auth : routes} sticky />
+      <LoadingFullSize />
+      <DefaultNavbar brand={"Quản lý phòng máy UTE"} routes={getRoute()} sticky />
       <MKBox
         minHeight="75vh"
         width="100%"
