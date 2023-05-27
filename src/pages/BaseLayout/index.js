@@ -23,17 +23,17 @@ import routes from "routes";
 // Images
 import bgImage from "assets/images/bg-presentation.jpg";
 
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 
 import { Icon } from "@mui/material";
-import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import helper from "utils/helper";
+import { AuthContext } from "components/AuthContext/authContext";
 
 function BaseLayout({ children }) {
   const [user, setUser] = useState({});
-  const navigate = useNavigate();
   const userFromStorage = JSON.parse(helper.getStorage("user"));
+  const { logout } = useContext(AuthContext);
 
   useEffect(() => {
     if (helper.getCookie()) {
@@ -41,15 +41,12 @@ function BaseLayout({ children }) {
     } else {
       helper.removeStorage("user");
       setUser(null);
-      navigate("/sign-in");
       toast.error("Session expired!!");
     }
   }, []);
 
   const handleLogout = () => {
-    helper.removeCookie();
-    helper.removeStorage("user");
-    navigate("/sign-in");
+    logout();
   };
 
   const auth = [

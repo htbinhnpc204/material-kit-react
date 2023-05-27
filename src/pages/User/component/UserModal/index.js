@@ -8,14 +8,32 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import MKInput from "components/MKInput";
 import { useEffect, useState } from "react";
+import { shadows } from "@mui/system";
 
 // prop-types is a library for typechecking of props
-import { Autocomplete, Input, TextField } from "@mui/material";
+import {
+  Autocomplete,
+  Box,
+  IconButton,
+  Input,
+  InputAdornment,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import MKBox from "components/MKBox";
 import PropTypes from "prop-types";
+import { Clear, CloudUpload } from "@mui/icons-material";
+import MKAvatar from "components/MKAvatar";
 
 function UserModal({ user, roles, isOpen, onClose, onSubmit }) {
+  // eslint-disable-next-line no-undef
+  const dayjs = require("dayjs");
+
+  let maxDate = new Date();
+  maxDate.setFullYear(maxDate.getFullYear() - 18);
+  maxDate = dayjs(maxDate);
+
   const [email, setEmail] = useState("");
   const [studentId, setStudentId] = useState("");
   const [name, setName] = useState("");
@@ -25,9 +43,6 @@ function UserModal({ user, roles, isOpen, onClose, onSubmit }) {
   const [dob, setDob] = useState(null);
   const [role, setRole] = useState(null);
   const [gender, setGender] = useState({});
-
-  // eslint-disable-next-line no-undef
-  const dayjs = require("dayjs");
 
   const handleEmailChange = (event) => {
     setEmail(event.target.value);
@@ -73,7 +88,7 @@ function UserModal({ user, roles, isOpen, onClose, onSubmit }) {
     setAddress(user?.address || "");
     setPhone(user?.phone || "");
     setRole(user?.role || null);
-    setDob(dayjs(user?.dob));
+    setDob(user?.dob ? dayjs(user?.dob) : null);
     if (user) {
       genderList.map((obj, idx) => {
         if (obj.key === user.gender) {
@@ -116,7 +131,7 @@ function UserModal({ user, roles, isOpen, onClose, onSubmit }) {
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <Dialog open={isOpen} onClose={onClose}>
+      <Dialog fullWidth open={isOpen} onClose={onClose} maxWidth="md">
         <DialogTitle>{user ? "Chỉnh sửa thông tin người dùng" : "Thêm mới"}</DialogTitle>
         <DialogContent>
           <MKBox mt={1} mb={2}>
@@ -180,10 +195,39 @@ function UserModal({ user, roles, isOpen, onClose, onSubmit }) {
             />
           </MKBox>
           <MKBox mb={2}>
-            <DatePicker label="Ngày sinh" value={dob} onChange={handleDobChange} format="LL" />
+            <DatePicker
+              disableFuture
+              maxDate={maxDate}
+              label="Ngày sinh"
+              value={dob ? dob : maxDate}
+              onChange={handleDobChange}
+              format="LL"
+            />
           </MKBox>
-          <MKBox mb={2}>
-            <Input type="file" label="Ânhr đại diện" id="avatar" onChange={handleAvatarChange} />
+          <Typography variant="span">Ảnh đại diện</Typography>
+          <MKBox mb={2} style={{ display: "flex" }}>
+            <Input
+              type="file"
+              id="avatar"
+              onChange={handleAvatarChange}
+              endAdornment={
+                <InputAdornment position="end">
+                  <IconButton component="label" htmlFor="avatar" edge="end" size="small">
+                    <CloudUpload />
+                  </IconButton>
+                </InputAdornment>
+              }
+            />
+            {avatar && (
+              <>
+                <MKAvatar style={{ marginLeft: 32 }} src={URL.createObjectURL(avatar)} />
+                <Box>
+                  <IconButton onClick={() => setAvatar(null)}>
+                    <Clear />
+                  </IconButton>
+                </Box>
+              </>
+            )}
           </MKBox>
         </DialogContent>
         <DialogActions>

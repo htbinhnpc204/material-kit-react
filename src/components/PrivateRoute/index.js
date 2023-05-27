@@ -1,17 +1,15 @@
-/* eslint-disable react/prop-types */
-import { Redirect, Route } from "react-router-dom";
+import { AuthContext } from "components/AuthContext/authContext";
+import { useContext } from "react";
+import { Navigate, useLocation } from "react-router-dom";
 
-const PrivateRoute = ({ component: Component, isAuthenticated, ...rest }) => (
-  <Route
-    {...rest}
-    render={(props) =>
-      isAuthenticated ? (
-        <Component {...props} />
-      ) : (
-        <Redirect to={{ pathname: "/login", state: { from: props.location } }} />
-      )
-    }
-  />
-);
+// eslint-disable-next-line react/prop-types
+export function PrivateRoute({ children }) {
+  const { isAuthenticated } = useContext(AuthContext);
+  const location = useLocation();
 
-export default PrivateRoute;
+  if (!isAuthenticated) {
+    return <Navigate to="/sign-in" state={{ from: location }} />;
+  }
+
+  return children;
+}

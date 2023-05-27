@@ -7,7 +7,7 @@ import MKButton from "components/MKButton";
 import MKInput from "components/MKInput";
 
 import { Add } from "@mui/icons-material";
-import { Table, TableBody, TableCell, TableRow } from "@mui/material";
+import { Table, TableBody, TableCell, TableRow, Typography } from "@mui/material";
 import { debounce } from "lodash";
 import { useCallback, useEffect, useState } from "react";
 import { toast } from "react-toastify";
@@ -25,7 +25,6 @@ import "react-toastify/dist/ReactToastify.css";
 import { info } from "utils/path";
 import UserModalView from "./component/ModalView";
 import UserModal from "./component/UserModal";
-import Typography from "layouts/sections/elements/typography";
 
 function User() {
   const [users, setUsers] = useState([]);

@@ -1,9 +1,7 @@
-import { useEffect } from "react";
-
-// react-router components
+/* eslint-disable no-unused-vars */
+import { useContext, useEffect } from "react";
+// eslint-disable-next-line no-unused-vars
 import { Route, Routes, useLocation } from "react-router-dom";
-
-// @mui material components
 import CssBaseline from "@mui/material/CssBaseline";
 import { ThemeProvider } from "@mui/material/styles";
 
@@ -22,15 +20,20 @@ import SchedulePage from "layouts/pages/schedule";
 import User from "layouts/pages/user";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { PrivateRoute } from "components/PrivateRoute";
+import { AuthProvider } from "components/AuthContext/authContext";
+import helper from "utils/helper";
+import { AuthContext } from "components/AuthContext/authContext";
 
 export default function App() {
   const { pathname } = useLocation();
+  const { setIsAuthenticated } = useContext(AuthContext);
 
   // Setting page scroll to 0 when changing the route
   useEffect(() => {
-    console.log(pathname);
     document.documentElement.scrollTop = 0;
     document.scrollingElement.scrollTop = 0;
+    helper.getCookie() ? setIsAuthenticated(true) : setIsAuthenticated(false);
   }, [pathname]);
 
   return (
@@ -39,15 +42,64 @@ export default function App() {
       <CssBaseline />
       <Routes>
         <Route path="/" element={<Landing />} />
-        <Route path="/labs" element={<Lab />} />
-        <Route path="/users" element={<User />} />
-        <Route path="/classes" element={<ClassPage />} />
-        <Route path="/classes/:id" element={<ClassDetailPage />} />
-        <Route path="/computers" element={<Computer />} />
-        <Route path="/profile" element={<ProfilePage />} />
+        <Route
+          path="/profile"
+          element={
+            <PrivateRoute>
+              <ProfilePage />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/labs"
+          element={
+            <PrivateRoute>
+              <Lab />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/users"
+          element={
+            <PrivateRoute>
+              <User />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/classes"
+          element={
+            <PrivateRoute>
+              <ClassPage />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/classes/:id"
+          element={
+            <PrivateRoute>
+              <ClassDetailPage />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/schedules"
+          element={
+            <PrivateRoute>
+              <SchedulePage />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/computers"
+          element={
+            <PrivateRoute>
+              <Computer />
+            </PrivateRoute>
+          }
+        />
         <Route path="/sign-in" element={<SignInPage />} />
         <Route path="/sign-up" element={<SignUpPage />} />
-        <Route path="/schedules" element={<SchedulePage />} />
         <Route path="/presentation" element={<Presentation />} />
       </Routes>
     </ThemeProvider>

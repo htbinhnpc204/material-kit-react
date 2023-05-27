@@ -151,7 +151,7 @@ function UserModalView({ user, roles, isOpen, onClose }) {
         </MKBox>
       </DialogContent>
       <DialogActions>
-        <Button onClick={onClose}>Close</Button>
+        <Button onClick={onClose}>Đóng</Button>
       </DialogActions>
     </Dialog>
   );

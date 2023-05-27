@@ -1,10 +1,11 @@
-import { useEffect, useState } from "react";
+/* eslint-disable no-unused-vars */
+import { useContext, useEffect, useState } from "react";
 
 // react-router-dom components
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 // @mui material components
-import { CircularProgress } from "@mui/material";
+import { CircularProgress, Typography } from "@mui/material";
 import Card from "@mui/material/Card";
 import Grid from "@mui/material/Grid";
 import Switch from "@mui/material/Switch";
@@ -21,81 +22,56 @@ import MKTypography from "components/MKTypography";
 import SimpleFooter from "examples/Footers/SimpleFooter";
 import DefaultNavbar from "examples/Navbars/DefaultNavbar";
 
-// Material Kit 2 React page layout routes
-
-// API support
-import api from "utils/api";
-import helper from "utils/helper";
-import { auth, info } from "utils/path";
-
 // Images
 import bgImage from "assets/images/bg-sign-in-basic.jpeg";
 
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { AuthContext } from "components/AuthContext/authContext";
+import { useForm } from "react-hook-form";
+import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
 
 function SignInBasic() {
+  const location = useLocation();
+  const yupSchema = yup.object({
+    email: yup.string().required("Email is required!").email("Invalid Email!"),
+    password: yup.string().required("Required"),
+  });
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    mode: "all",
+    resolver: yupResolver(yupSchema),
+  });
+
   const [rememberMe, setRememberMe] = useState(false);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const [isLoading, setLoading] = useState(false);
+
+  const { login, isAuthenticated } = useContext(AuthContext);
 
   const navigate = useNavigate();
 
   const handleSetRememberMe = () => setRememberMe(!rememberMe);
 
-  const handleInputChange = (e) => {
-    if (e.target.name === "email") {
-      setEmail(e.target.value);
-    } else {
-      setPassword(e.target.value);
-    }
-  };
-
-  const handleSubmit = () => {
+  const onSubmit = (data) => {
     if (rememberMe) {
-      localStorage.setItem("oldEmail", email);
-      localStorage.setItem("oldPassword", password);
+      localStorage.setItem("oldEmail", data.email);
+      localStorage.setItem("oldPassword", data.password);
     }
-
     setLoading(true);
-
-    const payload = { email: email, password: password };
-    const loginRes = api.post({ path: auth.login, payload: payload });
-    loginRes
-      .then((response) => {
-        helper.setCookie(response.data.data.access_token);
-        api.setJwtToken(helper.getCookie());
-        const infoRes = api.get({ path: info });
-        infoRes
-          .then((response) => {
-            helper.setStorage("user", JSON.stringify(response.data?.data));
-            toast.success(`Welcome ${response.data?.data?.name}`, {
-              position: toast.POSITION.BOTTOM_LEFT,
-            });
-
-            if (helper.getStorage("user")) {
-              setLoading(false);
-              navigate("/");
-            }
-          })
-          .catch(() => {
-            setLoading(false);
-          });
-      })
-      .catch(() => {
-        setLoading(false);
-        toast.error(`Email or password is incorrect!!`, {
-          position: toast.POSITION.BOTTOM_LEFT,
-        });
-      });
+    login(data.email, data.password, setLoading);
   };
 
   useEffect(() => {
-    if (JSON.parse(helper.getStorage("user"))) {
-      navigate("/");
+    if (isAuthenticated) {
+      const { from } = location.state || { from: { pathname: "/" } };
+      navigate(from.pathname);
     }
-  }, []);
+  }, [isAuthenticated]);
 
   return (
     <>
@@ -139,26 +115,36 @@ function SignInBasic() {
                 </MKTypography>
               </MKBox>
               <MKBox pt={4} pb={3} px={3}>
-                <MKBox component="form" role="form">
+                <MKBox component="form" role="form" onSubmit={handleSubmit(onSubmit)}>
                   <MKBox mb={2}>
                     <MKInput
                       name="email"
+                      error={errors?.email ? true : false}
+                      {...register("email")}
                       type="email"
                       label="Email"
-                      value={email}
-                      onChange={handleInputChange}
                       fullWidth
                     />
+                    {errors?.email && (
+                      <Typography variant="caption" color="error">
+                        {errors?.email.message}
+                      </Typography>
+                    )}
                   </MKBox>
                   <MKBox mb={2}>
                     <MKInput
                       name="password"
+                      error={errors?.password ? true : false}
+                      {...register("password")}
                       type="password"
                       label="Password"
-                      value={password}
-                      onChange={handleInputChange}
                       fullWidth
                     />
+                    {errors?.password && (
+                      <Typography variant="caption" color="error">
+                        {errors?.password.message}
+                      </Typography>
+                    )}
                   </MKBox>
                   <MKBox display="flex" alignItems="center" ml={-1}>
                     <Switch checked={rememberMe} onChange={handleSetRememberMe} />
@@ -174,7 +160,7 @@ function SignInBasic() {
                   </MKBox>
                   <MKBox mt={4} mb={1}>
                     <MKButton
-                      onClick={handleSubmit}
+                      type="submit"
                       variant="gradient"
                       color={isLoading ? "secondary" : "info"}
                       disabled={isLoading}
