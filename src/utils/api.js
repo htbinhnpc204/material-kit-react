@@ -1,7 +1,7 @@
 import axios from "axios";
 
 // const baseUrl = "http://localhost:8080/api/v1";
-const baseUrl = "http://54.250.186.184/api/v1";
+const baseUrl = "http://167.71.214.36:8080/api/v1";
 
 export default {
   token: undefined,

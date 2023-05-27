@@ -35,7 +35,7 @@ function Profile() {
           <MKBox mt={{ xs: -20, md: -20 }} textAlign="center">
             <MKAvatar
               src={`${helper.getImageSource(user?.avatar)}`}
-              alt={`${helper.getImageSource(user?.name || user?.email)}`}
+              alt={`${user?.name || user?.email}`}
               size="xxl"
               shadow="xl"
             />
@@ -51,7 +51,7 @@ function Profile() {
               <Grid container spacing={3} mb={3}>
                 <Grid item>
                   <MKTypography component="span" variant="body2" color="text">
-                    Student ID:&nbsp;
+                    Mã sinh viên:&nbsp;
                   </MKTypography>
                   <MKTypography component="span" variant="body2" fontWeight="bold">
                     {user?.student_id || "Null"}
@@ -59,7 +59,7 @@ function Profile() {
                 </Grid>
                 <Grid item>
                   <MKTypography component="span" variant="body2" color="text">
-                    Date of birth:&nbsp;
+                    Ngày sinh:&nbsp;
                   </MKTypography>
                   <MKTypography component="span" variant="body2" fontWeight="bold">
                     {user?.dob ? new Date(user?.dob).toDateString() : "Null"}
@@ -67,7 +67,7 @@ function Profile() {
                 </Grid>
                 <Grid item>
                   <MKTypography component="span" variant="body2" color="text">
-                    Phone:&nbsp;
+                    Số điện thoại:&nbsp;
                   </MKTypography>
                   <MKTypography component="span" variant="body2" fontWeight="bold">
                     {user?.phone || "Null"}
@@ -75,10 +75,10 @@ function Profile() {
                 </Grid>
                 <Grid item>
                   <MKTypography component="span" variant="body2" color="text">
-                    Gender:&nbsp;
+                    Giới tính:&nbsp;
                   </MKTypography>
                   <MKTypography component="span" variant="body2" fontWeight="bold">
-                    {user?.gender === "NAM" ? "Male" : "Female"}
+                    {user?.gender === "NAM" ? "Nam" : "Nữ"}
                   </MKTypography>
                 </Grid>
               </Grid>
