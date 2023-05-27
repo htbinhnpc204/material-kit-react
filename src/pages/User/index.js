@@ -7,7 +7,7 @@ import MKButton from "components/MKButton";
 import MKInput from "components/MKInput";
 
 import { Add } from "@mui/icons-material";
-import { Table, TableBody, TableCell, TableRow, Typography } from "@mui/material";
+import { IconButton, Table, TableBody, TableCell, TableRow, Typography } from "@mui/material";
 import { debounce } from "lodash";
 import { useCallback, useEffect, useState } from "react";
 import { toast } from "react-toastify";
@@ -197,7 +197,7 @@ function User() {
               <TableCell style={{ fontWeight: "bold" }} align="center">
                 Giới tính
               </TableCell>
-              <TableCell style={{ fontWeight: "bold" }} align="right" colSpan={3}>
+              <TableCell style={{ fontWeight: "bold" }} align="right">
                 Hành động
               </TableCell>
             </TableRow>
@@ -212,40 +212,21 @@ function User() {
                   <TableCell align="center">
                     {genderList.find((g) => g.key === user.gender)?.value}
                   </TableCell>
-                  <TableCell style={{ width: 10, padding: 0 }} align="center">
-                    <MKButton
-                      color="info"
-                      variant="text"
-                      size="small"
-                      onClick={() => handleView(user)}
-                    >
+                  <TableCell align="right">
+                    <IconButton size="small" color="info" onClick={() => handleView(user)}>
                       <VisibilityIcon />
-                    </MKButton>
-                  </TableCell>
-                  <TableCell style={{ width: 10, padding: 0 }} align="center">
-                    <MKButton
-                      color="success"
-                      variant="text"
-                      size="small"
-                      onClick={() => handleEdit(user)}
-                    >
+                    </IconButton>
+                    <IconButton size="small" color="success" onClick={() => handleEdit(user)}>
                       <EditIcon />
-                    </MKButton>
-                  </TableCell>
-                  <TableCell style={{ width: 10, padding: 0 }} align="center">
-                    <MKButton
-                      color="error"
-                      variant="text"
-                      size="small"
-                      onClick={() => handleDelete(user)}
-                    >
+                    </IconButton>
+                    <IconButton size="small" color="error" onClick={() => handleDelete(user)}>
                       <DeleteIcon />
-                    </MKButton>
+                    </IconButton>
                   </TableCell>
                 </TableRow>
               );
             })}
-            {users.length === 0 && <Typography variant="h5">Không có người dùng nào</Typography>}
+            {users.length === 0 && <Typography variant="body2">Không có người dùng nào</Typography>}
           </TableBody>
         </Table>
         <MKBox display="flex" justifyContent="center" mt={3}>

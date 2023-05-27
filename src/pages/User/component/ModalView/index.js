@@ -14,62 +14,8 @@ import MKTypography from "components/MKTypography";
 import PropTypes from "prop-types";
 import helper from "utils/helper";
 
-function UserModalView({ user, roles, isOpen, onClose }) {
-  const [email, setEmail] = useState("");
-  const [studentId, setStudentId] = useState("");
-  const [name, setName] = useState("");
-  const [avatar, setAvatar] = useState(null);
-  const [phone, setPhone] = useState("");
-  const [address, setAddress] = useState("");
-  const [dob, setDob] = useState(null);
-  const [role, setRole] = useState(null);
-  const [gender, setGender] = useState({});
-
-  // eslint-disable-next-line no-undef
-  const dayjs = require("dayjs");
-
-  const handleEmailChange = (event) => {
-    setEmail(event.target.value);
-  };
-
-  const handleStudentIdChange = (event) => {
-    setStudentId(event.target.value);
-  };
-
-  const handleNameChange = (event) => {
-    setName(event.target.value);
-  };
-
-  const handlePhoneChange = (event) => {
-    setPhone(event.target.value);
-  };
-
-  const handleAddressChange = (event) => {
-    setAddress(event.target.value);
-  };
-
-  const handleDobChange = (value) => {
-    console.log(value);
-    setDob(value);
-  };
-
-  const handleAvatarChange = (event) => {
-    setAvatar(event.target.files[0]);
-  };
-
-  const handleGenderChange = (e, value) => {
-    setGender(value);
-  };
-
-  const handleRoleChange = (e, value) => {
-    setRole(value);
-  };
-
+function UserModalView({ user, isOpen, onClose }) {
   const refreshState = () => {};
-
-  const capitalize = (value) => {
-    return value.charAt(0).toUpperCase() + value.slice(1).toLowerCase();
-  };
 
   const getGenderMap = (gender) =>
     genderList.map((obj, idx) => {
@@ -159,7 +105,6 @@ function UserModalView({ user, roles, isOpen, onClose }) {
 
 UserModalView.propTypes = {
   user: PropTypes.object.isRequired,
-  roles: PropTypes.array.isRequired,
   isOpen: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
 };
