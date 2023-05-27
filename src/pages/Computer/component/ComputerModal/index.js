@@ -49,16 +49,18 @@ function LabModal({ computer, labs, isOpen, onClose, onSubmit }) {
   }, [isOpen]);
 
   return (
-    <Dialog open={isOpen} onClose={onClose}>
+    <Dialog fullWidth open={isOpen} onClose={onClose}>
       <DialogTitle>{lab ? "Chỉnh sửa máy tính" : "Thêm mới máy tính"}</DialogTitle>
       <DialogContent>
         <MKBox mt={1} mb={2}>
           <MKInput label="Tên" fullWidth value={name} onChange={handleNameChange} />
         </MKBox>
         <MKBox mb={2}>
-          <MKInput
+          <TextField
             label="Mô tả"
             type="textarea"
+            rows={4}
+            multiline
             fullWidth
             value={description}
             onChange={handleDescriptionChange}

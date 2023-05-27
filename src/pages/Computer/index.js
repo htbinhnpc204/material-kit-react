@@ -1,10 +1,7 @@
+/* eslint-disable react/prop-types */
 import Card from "@mui/material/Card";
 import Grid from "@mui/material/Grid";
 import Pagination from "@mui/material/Pagination";
-
-import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
-import ModeEditOutlinedIcon from "@mui/icons-material/ModeEditOutlined";
-import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 
 import MKBox from "components/MKBox";
 import MKButton from "components/MKButton";
@@ -22,6 +19,7 @@ import helper from "utils/helper";
 import ComputerModal from "./component/ComputerModal";
 
 import "react-toastify/dist/ReactToastify.css";
+import CommonActions from "components/CommonAction";
 
 function Computer() {
   const [computers, setComputers] = useState([]);
@@ -168,42 +166,12 @@ function Computer() {
                 <CardContent>
                   <Typography variant="body1">{computer.description}</Typography>
                 </CardContent>
-                <MKBox
-                  style={{
-                    marginTop: "auto",
-                    marginLeft: "auto",
-                    marginBottom: 5,
-                    marginRight: 5,
-                  }}
-                >
-                  <MKButton
-                    startIcon={<VisibilityOutlinedIcon />}
-                    color="info"
-                    variant="text"
-                    size="small"
-                    onClick={() => handleView(computer.id)}
-                  >
-                    View
-                  </MKButton>
-                  <MKButton
-                    startIcon={<ModeEditOutlinedIcon />}
-                    color="success"
-                    variant="text"
-                    size="small"
-                    onClick={() => handleEdit(computer)}
-                  >
-                    Edit
-                  </MKButton>
-                  <MKButton
-                    startIcon={<DeleteOutlineOutlinedIcon />}
-                    color="primary"
-                    variant="text"
-                    size="small"
-                    onClick={() => handleDelete(computer)}
-                  >
-                    Delete
-                  </MKButton>
-                </MKBox>
+                <CommonActions
+                  handleEdit={handleEdit}
+                  handleView={handleView}
+                  handleDelete={handleDelete}
+                  entity={computer}
+                ></CommonActions>
               </Card>
             </Grid>
           ))}

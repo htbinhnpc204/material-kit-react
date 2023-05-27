@@ -50,7 +50,6 @@ function LabModal({ lab, isOpen, onClose, onSubmit }) {
   };
 
   useEffect(() => {
-    console.log(lab);
     if (isOpen) {
       api.setJwtToken(helper.getCookie());
       const res = api.get({ path: `${users}` });
@@ -59,7 +58,7 @@ function LabModal({ lab, isOpen, onClose, onSubmit }) {
           setManagers(response.data.data.items);
         })
         .catch(() => {
-          toast.error("Fetch manager failed");
+          toast.error("Đồng bộ danh sách cán bộ thất bại");
         });
     }
     refreshState();
@@ -67,14 +66,14 @@ function LabModal({ lab, isOpen, onClose, onSubmit }) {
 
   return (
     <Dialog fullWidth open={isOpen} onClose={onClose}>
-      <DialogTitle>{lab ? "Edit Lab" : "Add Lab"}</DialogTitle>
+      <DialogTitle>{lab ? "Chỉnh sửa phòng máy" : "Thêm mới phòng máy"}</DialogTitle>
       <DialogContent>
         <MKBox mt={1} mb={2}>
-          <MKInput label="Name" fullWidth value={name} onChange={handleNameChange} />
+          <MKInput label="Tên phòng máy" fullWidth value={name} onChange={handleNameChange} />
         </MKBox>
         <MKBox mb={2}>
           <MKInput
-            label="Description"
+            label="Mô tả chi tiết"
             fullWidth
             value={description}
             onChange={handleDescriptionChange}
@@ -91,7 +90,7 @@ function LabModal({ lab, isOpen, onClose, onSubmit }) {
             renderInput={(params) => (
               <TextField
                 {...params}
-                label="Manager"
+                label="Quản lý"
                 InputProps={{
                   ...params.InputProps,
                   type: "search",
@@ -102,9 +101,9 @@ function LabModal({ lab, isOpen, onClose, onSubmit }) {
         </MKBox>
       </DialogContent>
       <DialogActions>
-        <Button onClick={onClose}>Cancel</Button>
+        <Button onClick={onClose}>Hủy</Button>
         <Button onClick={handleSave} color="primary">
-          Save
+          Lưu
         </Button>
       </DialogActions>
     </Dialog>

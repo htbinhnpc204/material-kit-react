@@ -2,10 +2,6 @@ import Card from "@mui/material/Card";
 import Grid from "@mui/material/Grid";
 import Pagination from "@mui/material/Pagination";
 
-import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
-import ModeEditOutlinedIcon from "@mui/icons-material/ModeEditOutlined";
-import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
-
 import MKBox from "components/MKBox";
 import MKButton from "components/MKButton";
 import MKInput from "components/MKInput";
@@ -22,6 +18,7 @@ import helper from "utils/helper";
 
 import { useNavigate } from "react-router-dom";
 import "react-toastify/dist/ReactToastify.css";
+import CommonActions from "components/CommonAction";
 
 function Class() {
   const [classes, setClasses] = useState([]);
@@ -165,42 +162,12 @@ function Class() {
                 <CardContent>
                   <Typography variant="body1">{_class.description}</Typography>
                 </CardContent>
-                <MKBox
-                  style={{
-                    marginTop: "auto",
-                    marginLeft: "auto",
-                    marginBottom: 5,
-                    marginRight: 5,
-                  }}
-                >
-                  <MKButton
-                    startIcon={<VisibilityOutlinedIcon />}
-                    color="info"
-                    variant="text"
-                    size="small"
-                    onClick={() => handleView(_class.id)}
-                  >
-                    View
-                  </MKButton>
-                  <MKButton
-                    startIcon={<ModeEditOutlinedIcon />}
-                    color="success"
-                    variant="text"
-                    size="small"
-                    // onClick={() => handleEdit(_class)}
-                  >
-                    Edit
-                  </MKButton>
-                  <MKButton
-                    startIcon={<DeleteOutlineOutlinedIcon />}
-                    color="primary"
-                    variant="text"
-                    size="small"
-                    onClick={() => handleDelete(_class)}
-                  >
-                    Delete
-                  </MKButton>
-                </MKBox>
+                <CommonActions
+                  // handleEdit={handleEdit}
+                  handleView={handleView}
+                  handleDelete={handleDelete}
+                  entity={_class}
+                ></CommonActions>
               </Card>
             </Grid>
           ))}

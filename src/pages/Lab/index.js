@@ -2,10 +2,6 @@ import Card from "@mui/material/Card";
 import Grid from "@mui/material/Grid";
 import Pagination from "@mui/material/Pagination";
 
-import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
-import ModeEditOutlinedIcon from "@mui/icons-material/ModeEditOutlined";
-import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
-
 import MKBox from "components/MKBox";
 import MKButton from "components/MKButton";
 import MKInput from "components/MKInput";
@@ -20,8 +16,8 @@ import { labs as labPath } from "utils/path";
 import api from "utils/api";
 import helper from "utils/helper";
 import LabModal from "./component/LabModal";
-
 import "react-toastify/dist/ReactToastify.css";
+import CommonActions from "components/CommonAction";
 
 function Lab() {
   const [labs, setLabs] = useState([]);
@@ -154,49 +150,28 @@ function Lab() {
         <Grid container spacing={2}>
           {labs.map((lab) => (
             <Grid item xs={12} sm={6} md={4} key={lab.name}>
-              <Card sx={{ height: "250px" }}>
+              <Card sx={{ height: "300px" }}>
                 <CardHeader title={lab.name} />
                 <CardContent>
                   <Typography variant="body2">Quản lý bởi: {lab.manager.name}</Typography>
                   <Typography variant="body2">Số lượng máy: {lab.computers?.length}</Typography>
-                  <Typography variant="body1">{lab.description}</Typography>
+                  <Typography
+                    sx={{
+                      display: "-webkit-box",
+                      overflow: "hidden",
+                      WebkitBoxOrient: "vertical",
+                      WebkitLineClamp: 3,
+                    }}
+                  >
+                    {lab.description}
+                  </Typography>
                 </CardContent>
-                <MKBox
-                  style={{
-                    marginTop: "auto",
-                    marginLeft: "auto",
-                    marginBottom: 5,
-                    marginRight: 5,
-                  }}
-                >
-                  <MKButton
-                    startIcon={<VisibilityOutlinedIcon />}
-                    color="info"
-                    variant="text"
-                    size="small"
-                    onClick={() => handleView(lab.id)}
-                  >
-                    View
-                  </MKButton>
-                  <MKButton
-                    startIcon={<ModeEditOutlinedIcon />}
-                    color="success"
-                    variant="text"
-                    size="small"
-                    onClick={() => handleEdit(lab)}
-                  >
-                    Edit
-                  </MKButton>
-                  <MKButton
-                    startIcon={<DeleteOutlineOutlinedIcon />}
-                    color="primary"
-                    variant="text"
-                    size="small"
-                    onClick={() => handleDelete(lab)}
-                  >
-                    Delete
-                  </MKButton>
-                </MKBox>
+                <CommonActions
+                  handleEdit={handleEdit}
+                  handleView={handleView}
+                  handleDelete={handleDelete}
+                  entity={lab}
+                ></CommonActions>
               </Card>
             </Grid>
           ))}
