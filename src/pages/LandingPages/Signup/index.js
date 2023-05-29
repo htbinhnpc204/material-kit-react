@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
+import * as yup from "yup";
 
 // react-router-dom components
 import { Link, useNavigate } from "react-router-dom";
 
 // @mui material components
-import { Autocomplete, CircularProgress, TextField } from "@mui/material";
+import { CircularProgress } from "@mui/material";
 import Card from "@mui/material/Card";
 import Grid from "@mui/material/Grid";
 
@@ -32,36 +33,29 @@ import bgImage from "assets/images/bg-sign-in-basic.jpeg";
 
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { useForm } from "react-hook-form";
 
 function SignUpBasic() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [rePassword, setRePassword] = useState("");
   const [isLoading, setLoading] = useState(false);
-  const [gender, setGender] = useState({});
+
+  const yupSchema = yup.object({
+    email: yup.string().required("Email is required!").email("Invalid Email!"),
+    password: yup.string().required("Required"),
+  });
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    mode: "all",
+    resolver: yupResolver(yupSchema),
+  });
 
   const navigate = useNavigate();
 
-  const handleInputChange = (e) => {
-    if (e.target.name === "email") {
-      setEmail(e.target.value);
-    } else if (e.target.name === "password") {
-      setPassword(e.target.value);
-    } else {
-      setRePassword(e.target.value);
-    }
-  };
-
-  const handleGenderChange = (e, value) => {
-    setGender(value);
-  };
-
-  const handleSubmit = () => {
-    if (password !== rePassword) {
-      toast.error("Password and re-password does not match !!");
-      return;
-    }
-
+  const onSubmit = () => {
     setLoading(true);
 
     const payload = { email: email, password: password, gender: gender.key };
@@ -101,17 +95,10 @@ function SignUpBasic() {
   };
 
   useEffect(() => {
-    setGender(genderList[0]);
     if (JSON.parse(helper.getStorage("user"))) {
       navigate("/");
     }
   }, []);
-
-  const genderList = [
-    { value: "Nam", key: "NAM" },
-    { value: "Nữ", key: "NU" },
-    { value: "Other", key: "OTHER" },
-  ];
 
   return (
     <>
@@ -150,60 +137,13 @@ function SignUpBasic() {
                 textAlign="center"
               >
                 <MKTypography variant="h4" fontWeight="medium" color="white" mt={1}>
-                  Sign Up
+                  Cấp lại mật khẩu
                 </MKTypography>
               </MKBox>
               <MKBox pt={4} pb={3} px={3}>
                 <MKBox component="form" role="form">
                   <MKBox mb={2}>
-                    <MKInput
-                      name="email"
-                      type="email"
-                      label="Email"
-                      value={email}
-                      onChange={handleInputChange}
-                      fullWidth
-                    />
-                  </MKBox>
-                  <MKBox mb={2}>
-                    <MKInput
-                      name="password"
-                      type="password"
-                      label="Password"
-                      value={password}
-                      onChange={handleInputChange}
-                      fullWidth
-                    />
-                  </MKBox>
-                  <MKBox mb={2}>
-                    <MKInput
-                      name="re-password"
-                      type="password"
-                      label="Re-enter Password"
-                      value={rePassword}
-                      onChange={handleInputChange}
-                      fullWidth
-                    />
-                  </MKBox>
-                  <MKBox mb={2}>
-                    <Autocomplete
-                      freeSolo
-                      id="gender"
-                      value={gender}
-                      options={genderList}
-                      getOptionLabel={(option) => option?.value}
-                      onChange={handleGenderChange}
-                      renderInput={(params) => (
-                        <TextField
-                          {...params}
-                          label="Gender"
-                          InputProps={{
-                            ...params.InputProps,
-                            type: "search",
-                          }}
-                        />
-                      )}
-                    />
+                    <MKInput name="student-id" label="Mã sinh viên" value={studentId} fullWidth />
                   </MKBox>
                   <MKBox mt={4} mb={1}>
                     <MKButton

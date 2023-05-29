@@ -11,6 +11,7 @@ import Grid from "@mui/material/Grid";
 import Switch from "@mui/material/Switch";
 
 // @mui icons
+import HomeIcon from "@mui/icons-material/Home";
 
 // Material Kit 2 React components
 import MKBox from "components/MKBox";
@@ -76,7 +77,16 @@ function SignInBasic() {
   return (
     <>
       <ToastContainer />
-      <DefaultNavbar routes={[]} transparent light />
+      <DefaultNavbar
+        brand={
+          <Typography style={{ display: "flex", alignItems: "center" }}>
+            <HomeIcon /> &nbsp; Trang chủ
+          </Typography>
+        }
+        routes={[]}
+        transparent
+        light
+      />
       <MKBox
         position="absolute"
         top={0}
@@ -111,7 +121,7 @@ function SignInBasic() {
                 textAlign="center"
               >
                 <MKTypography variant="h4" fontWeight="medium" color="white" mt={1}>
-                  Sign in
+                  Đăng nhập
                 </MKTypography>
               </MKBox>
               <MKBox pt={4} pb={3} px={3}>
@@ -177,22 +187,22 @@ function SignInBasic() {
                           size={"1rem"}
                         />
                       )}
-                      sign in
+                      Đăng nhập
                     </MKButton>
                   </MKBox>
                 </MKBox>
                 <MKBox mt={3} mb={1} textAlign="center">
                   <MKTypography variant="button" color="text">
-                    Don&apos;t have an account?{" "}
+                    Quên mật khẩu?{" "}
                     <MKTypography
                       component={Link}
-                      to="/sign-up"
+                      to="/reset-password"
                       variant="button"
                       color="info"
                       fontWeight="medium"
                       textGradient
                     >
-                      Sign up
+                      Cấp lại
                     </MKTypography>
                   </MKTypography>
                 </MKBox>

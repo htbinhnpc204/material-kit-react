@@ -43,7 +43,6 @@ import { Icon } from "@mui/material";
 
 // Pages
 import SignIn from "layouts/pages/authentication/sign-in";
-import SignUpPage from "layouts/pages/authentication/signup";
 
 const routes = [
   {
@@ -51,13 +50,6 @@ const routes = [
     icon: <Icon>login</Icon>,
     route: "/sign-in",
     component: <SignIn />,
-  },
-
-  {
-    name: "Đăng ký",
-    icon: <Icon>login</Icon>,
-    route: "/sign-in",
-    component: <SignUpPage />,
   },
 ];
 

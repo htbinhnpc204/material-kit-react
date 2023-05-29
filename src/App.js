@@ -99,7 +99,7 @@ export default function App() {
           }
         />
         <Route path="/sign-in" element={<SignInPage />} />
-        <Route path="/sign-up" element={<SignUpPage />} />
+        <Route path="/reset-password" element={<SignUpPage />} />
         <Route path="/presentation" element={<Presentation />} />
       </Routes>
     </ThemeProvider>

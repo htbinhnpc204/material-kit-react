@@ -25,7 +25,6 @@ import bgImage from "assets/images/bg-presentation.jpg";
 import { useContext, useEffect, useState } from "react";
 
 import { Icon } from "@mui/material";
-import { toast } from "react-toastify";
 import helper from "utils/helper";
 import { AuthContext } from "components/AuthContext/authContext";
 import LoadingFullSize from "components/Loading/fullSize";
@@ -42,7 +41,6 @@ function BaseLayout({ children }) {
     } else {
       helper.removeStorage("user");
       setUser(null);
-      toast.error("Phiên đăng nhập hết hạn");
     }
   }, []);
 
