@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { useEffect, useState } from "react";
 import * as yup from "yup";
 
@@ -40,8 +41,7 @@ function SignUpBasic() {
   const [isLoading, setLoading] = useState(false);
 
   const yupSchema = yup.object({
-    email: yup.string().required("Email is required!").email("Invalid Email!"),
-    password: yup.string().required("Required"),
+    student_id: yup.string().required("Student id is required!"),
   });
 
   const {
@@ -55,36 +55,19 @@ function SignUpBasic() {
 
   const navigate = useNavigate();
 
-  const onSubmit = () => {
+  const onSubmit = (data) => {
+    console.log(data);
     setLoading(true);
-
-    const payload = { email: email, password: password, gender: gender.key };
-    const registerRes = api.post({ path: auth.register, payload: payload });
+    const registerRes = api.post({
+      path: auth.reset,
+      payload: { student_id: data["student_id"] },
+    });
     registerRes
-      .then((response) => {
-        helper.setCookie(response.data.data.access_token);
-        api.setJwtToken(helper.getCookie());
-        const infoRes = api.get({ path: info });
-        infoRes
-          .then((response) => {
-            helper.setStorage("user", JSON.stringify(response.data?.data));
-            toast.success(
-              `Register successfully, welcome ${
-                response.data?.data?.name || response.data?.data?.email
-              }`,
-              {
-                position: toast.POSITION.BOTTOM_LEFT,
-              }
-            );
-
-            if (helper.getStorage("user")) {
-              setLoading(false);
-              navigate("/");
-            }
-          })
-          .catch(() => {
-            setLoading(false);
-          });
+      .then(() => {
+        toast.success(`Password reset successfully`, {
+          position: toast.POSITION.BOTTOM_LEFT,
+        });
+        setLoading(false);
       })
       .catch((error) => {
         setLoading(false);
@@ -141,13 +124,18 @@ function SignUpBasic() {
                 </MKTypography>
               </MKBox>
               <MKBox pt={4} pb={3} px={3}>
-                <MKBox component="form" role="form">
+                <MKBox onSubmit={handleSubmit(onSubmit)} component="form" role="form">
                   <MKBox mb={2}>
-                    <MKInput name="student-id" label="Mã sinh viên" value={studentId} fullWidth />
+                    <MKInput
+                      name="student_id"
+                      label="Mã sinh viên"
+                      {...register("student_id")}
+                      fullWidth
+                    />
                   </MKBox>
                   <MKBox mt={4} mb={1}>
                     <MKButton
-                      onClick={handleSubmit}
+                      type="submit"
                       variant="gradient"
                       color={isLoading ? "secondary" : "info"}
                       disabled={isLoading}

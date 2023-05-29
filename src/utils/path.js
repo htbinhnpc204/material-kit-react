@@ -1,6 +1,7 @@
 export const auth = {
   login: "/auth/login",
   register: "/auth/register",
+  reset: "/auth/password",
 };
 
 export const labs = "/labs";
