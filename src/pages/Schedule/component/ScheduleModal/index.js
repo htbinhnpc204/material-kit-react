@@ -7,19 +7,32 @@ import DialogTitle from "@mui/material/DialogTitle";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import MKInput from "components/MKInput";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 // prop-types is a library for typechecking of props
 import { Autocomplete, TextField } from "@mui/material";
 import { StaticDateTimePicker } from "@mui/x-date-pickers";
 import MKBox from "components/MKBox";
 import PropTypes from "prop-types";
+import dayjs from "dayjs";
+
+const disabledDates = [
+  dayjs("2023-05-31T06:00:00"),
+  dayjs("2023-06-01T14:30:00"),
+  dayjs("2023-06-02T09:15:00"),
+];
 
 function ScheduleModal({ schedule, labs, classes, isOpen, onClose, onSubmit }) {
   const [lab, setLab] = useState(null);
   const [_class, setClass] = useState(null);
   const [timeStart, setTimeStart] = useState(null);
   const [timeUse, setTimeUse] = useState(0);
+
+  const disableTime = (date) => {
+    return disabledDates.some(
+      (disabledDate) => date.isAfter(disabledDate) && date.isBefore(disabledDate.add(3, "hour"))
+    );
+  };
 
   const handleTimeUseChange = (event) => {
     setTimeUse(event.target.value);
@@ -40,17 +53,8 @@ function ScheduleModal({ schedule, labs, classes, isOpen, onClose, onSubmit }) {
   const refreshState = () => {
     setLab(schedule?.lab || null);
     setClass(schedule?.class || null);
-    setTimeStart(schedule?.time_start || null);
+    setTimeStart(dayjs(schedule?.time_start) || null);
     setTimeUse(schedule?.time_use || 0);
-    // if (schedule) {
-    //   genderList.map((obj, idx) => {
-    //     if (obj.key === schedule.gender) {
-    //       setGender(obj);
-    //     }
-    //   });
-    // } else {
-    //   setGender(genderList[0]);
-    // }
   };
 
   const handleSave = () => {
@@ -63,24 +67,14 @@ function ScheduleModal({ schedule, labs, classes, isOpen, onClose, onSubmit }) {
     });
   };
 
-  const capitalize = (value) => {
-    return value.charAt(0).toUpperCase() + value.slice(1).toLowerCase();
-  };
-
   useEffect(() => {
     refreshState();
   }, [isOpen]);
 
-  const genderList = [
-    { value: "Nam", key: "NAM" },
-    { value: "Nữ", key: "NU" },
-    { value: "Other", key: "OTHER" },
-  ];
-
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <Dialog open={isOpen} onClose={onClose}>
-        <DialogTitle>{schedule ? "Edit schedule" : "Add schedule"}</DialogTitle>
+        <DialogTitle>{schedule ? "Chỉnh sửa lịch" : "Đặt lịch sử dụng"}</DialogTitle>
         <DialogContent>
           <MKBox mt={1} mb={2}>
             <Autocomplete
@@ -93,7 +87,7 @@ function ScheduleModal({ schedule, labs, classes, isOpen, onClose, onSubmit }) {
               renderInput={(params) => (
                 <TextField
                   {...params}
-                  label="Labs"
+                  label="Phòng máy tính"
                   InputProps={{
                     ...params.InputProps,
                     type: "search",
@@ -113,7 +107,7 @@ function ScheduleModal({ schedule, labs, classes, isOpen, onClose, onSubmit }) {
               renderInput={(params) => (
                 <TextField
                   {...params}
-                  label="Classes"
+                  label="Lớp học phàn"
                   InputProps={{
                     ...params.InputProps,
                     type: "search",
@@ -124,14 +118,18 @@ function ScheduleModal({ schedule, labs, classes, isOpen, onClose, onSubmit }) {
           </MKBox>
           <MKBox mb={2}>
             <StaticDateTimePicker
-              label="Time start"
+              label="Thời gian bắt đầu"
+              renderInput={(props) => <TextField {...props} />}
+              minDateTime={dayjs(new Date())}
+              shouldDisableTime={disableTime}
+              disablePast
               value={timeStart}
               onChange={handleTimeStartChange}
             />
           </MKBox>
           <MKBox mb={2}>
             <MKInput
-              label="Time use"
+              label="Thời gian sử dụng"
               type="number"
               fullWidth
               value={timeUse}
@@ -140,9 +138,9 @@ function ScheduleModal({ schedule, labs, classes, isOpen, onClose, onSubmit }) {
           </MKBox>
         </DialogContent>
         <DialogActions>
-          <Button onClick={onClose}>Cancel</Button>
+          <Button onClick={onClose}>Hủy</Button>
           <Button onClick={handleSave} color="primary">
-            Save
+            Lưu
           </Button>
         </DialogActions>
       </Dialog>
