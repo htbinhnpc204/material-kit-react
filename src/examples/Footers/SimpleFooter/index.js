@@ -49,19 +49,19 @@ function SimpleFooter({ company, light }) {
           color={light ? "white" : "text"}
           fontSize={size.sm}
         >
-          &copy; {new Date().getFullYear()}, made with
+          &copy; {new Date().getFullYear()}, được tạo
           <MKBox fontSize={size.md} color={light ? "white" : "text"} mb={-0.5} mx={0.25}>
             <Icon color="inherit" fontSize="inherit">
               favorite
             </Icon>
           </MKBox>
-          by
+          bởi
           <Link href={href} target="_blank">
             <MKTypography variant="button" fontWeight="medium" color={light ? "white" : "dark"}>
               &nbsp;{name}&nbsp;
             </MKTypography>
           </Link>
-          for a better web.
+          cho một trải nghiệm tốt hơn.
         </MKBox>
       </MKBox>
     </Container>

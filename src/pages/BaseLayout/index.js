@@ -131,18 +131,31 @@ function BaseLayout({ children }) {
         minHeight="75vh"
         width="100%"
         sx={{
-          backgroundImage: `url(${bgImage})`,
-          backgroundSize: "fit",
-          backgroundPosition: "top",
+          position: "relative",
           display: "grid",
           placeItems: "center",
         }}
       >
+        <div
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            width: "100%",
+            height: "100%",
+            backgroundImage: `url(${bgImage})`,
+            backgroundSize: "fit",
+            backgroundPosition: "top",
+            filter: "blur(3px)",
+            zIndex: -1,
+          }}
+        />
         <Container>
           <Grid container item mt={3} xs={12} lg={7} justifyContent="center" mx="auto">
             <MKTypography
               variant="h1"
               color="white"
+              textAlign="center"
               mt={-6}
               mb={1}
               sx={({ breakpoints, typography: { size } }) => ({
@@ -151,7 +164,7 @@ function BaseLayout({ children }) {
                 },
               })}
             >
-              UTE Lab Management{" "}
+              Hệ thống quản lý phòng máy UTE
             </MKTypography>
             <MKTypography
               variant="body1"

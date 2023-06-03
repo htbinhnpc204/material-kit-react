@@ -72,12 +72,17 @@ function LabModal({ lab, isOpen, onClose, onSubmit }) {
           <MKInput label="Tên phòng máy" fullWidth value={name} onChange={handleNameChange} />
         </MKBox>
         <MKBox mb={2}>
-          <MKInput
-            label="Mô tả chi tiết"
-            fullWidth
-            value={description}
-            onChange={handleDescriptionChange}
-          />
+          <MKBox mb={2}>
+            <TextField
+              label="Mô tả chi tiết"
+              type="textarea"
+              rows={4}
+              multiline
+              fullWidth
+              value={description}
+              onChange={handleDescriptionChange}
+            />
+          </MKBox>
         </MKBox>
         <MKBox mb={2}>
           <Autocomplete

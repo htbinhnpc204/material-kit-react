@@ -15,24 +15,20 @@ import { StaticDateTimePicker } from "@mui/x-date-pickers";
 import MKBox from "components/MKBox";
 import PropTypes from "prop-types";
 import dayjs from "dayjs";
+import api from "utils/api";
+import helper from "utils/helper";
 
-const disabledDates = [
-  dayjs("2023-05-31T06:00:00"),
-  dayjs("2023-06-01T14:30:00"),
-  dayjs("2023-06-02T09:15:00"),
-];
+import { schedules as schedulePath, classes as classPath, labs as labPath } from "utils/path";
+import { toast } from "react-toastify";
 
 function ScheduleModal({ schedule, labs, classes, isOpen, onClose, onSubmit }) {
   const [lab, setLab] = useState(null);
   const [_class, setClass] = useState(null);
   const [timeStart, setTimeStart] = useState(null);
   const [timeUse, setTimeUse] = useState(0);
-
-  const disableTime = (date) => {
-    return disabledDates.some(
-      (disabledDate) => date.isAfter(disabledDate) && date.isBefore(disabledDate.add(3, "hour"))
-    );
-  };
+  const [schedules, setSchedules] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isDisabled, setIsDisabled] = useState(true);
 
   const handleTimeUseChange = (event) => {
     setTimeUse(event.target.value);
@@ -58,18 +54,88 @@ function ScheduleModal({ schedule, labs, classes, isOpen, onClose, onSubmit }) {
   };
 
   const handleSave = () => {
-    onSubmit({
-      id: schedule?.id,
-      lab: lab,
-      _class: _class,
-      timeStart: timeStart,
-      timeUse: timeUse,
+    if (isDisabled) {
+      toast.error("Vui lòng điền đầy đủ thông tin");
+    } else {
+      let flag = true;
+      if (!lab) {
+        toast.error("Phòng máy không được bỏ trống");
+        flag = false;
+      }
+      if (timeUse <= 0) {
+        toast.error("Thời gian sử dụng phải lớn hơn 0");
+        flag = false;
+      }
+
+      let start = dayjs(timeStart);
+      let end = start.add(timeUse, "hour");
+      schedules.forEach((el) => {
+        if (!flag) {
+          return;
+        }
+        if (start.isBefore(el.start) && end.isAfter(el.start)) {
+          toast.error("Thời gian sử dụng không được trùng");
+          flag = false;
+        }
+      });
+
+      if (flag) {
+        onSubmit({
+          id: schedule?.id,
+          lab: lab,
+          _class: _class,
+          timeStart: timeStart,
+          timeUse: timeUse,
+        });
+      }
+    }
+  };
+
+  const fetchSchedules = () => {
+    setIsLoading(true);
+    api.setJwtToken(helper.getCookie());
+    let path;
+    if (_class && lab) {
+      path = `${schedulePath}/fetch?lab_id=${lab?.id ? lab.id : ""}&class_id=${
+        _class?.id ? _class.id : ""
+      }`;
+    } else if (_class) {
+      path = `${classPath}/${_class?.id}/schedules`;
+    } else {
+      path = `${labPath}/${lab?.id}/schedules`;
+    }
+    const res = api.get({
+      path: path,
     });
+    res
+      .then((response) => {
+        let tmp = [];
+        response.data?.data?.items.forEach((element) => {
+          let timeStart = dayjs(element.time_start);
+          let timeEnd = dayjs(timeStart).add(element.time_use, "hour");
+          tmp.push({ start: timeStart, end: timeEnd });
+        });
+        setSchedules(tmp);
+      })
+      .catch((error) => console.log(error))
+      .finally(setIsLoading(false));
+  };
+
+  const isDisable = (date) => {
+    return schedules.some((data) => date.isAfter(data.start) && date.isBefore(data.end));
   };
 
   useEffect(() => {
     refreshState();
   }, [isOpen]);
+
+  useEffect(() => {
+    if (isOpen) {
+      console.log(isLoading || lab === null, lab, isLoading);
+      fetchSchedules();
+      setIsDisabled(isLoading || lab === null);
+    }
+  }, [_class, lab, isLoading]);
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -118,10 +184,10 @@ function ScheduleModal({ schedule, labs, classes, isOpen, onClose, onSubmit }) {
           </MKBox>
           <MKBox mb={2}>
             <StaticDateTimePicker
-              label="Thời gian bắt đầu"
+              disabled={isDisabled}
               renderInput={(props) => <TextField {...props} />}
               minDateTime={dayjs(new Date())}
-              shouldDisableTime={disableTime}
+              shouldDisableTime={(date) => isDisable(date)}
               disablePast
               value={timeStart}
               onChange={handleTimeStartChange}

@@ -13,26 +13,26 @@ const date = new Date().getFullYear();
 
 export default {
   brand: {
-    name: "Material Kit 2",
+    name: "UTE Computer Lab",
     image: logoCT,
     route: "/",
   },
   socials: [
     {
       icon: <FacebookIcon />,
-      link: "https://www.facebook.com/CreativeTim/",
+      link: "https://www.facebook.com/binhhothai204/",
     },
     {
       icon: <TwitterIcon />,
-      link: "https://twitter.com/creativetim",
+      link: "https://twitter.com/@xiaosan204",
     },
     {
       icon: <GitHubIcon />,
-      link: "https://github.com/creativetimofficial",
+      link: "https://github.com/htbinhnpc204",
     },
     {
       icon: <YouTubeIcon />,
-      link: "https://www.youtube.com/channel/UCVyTG4sCw-rOvB9oHkzZD1w",
+      link: "https://www.youtube.com/channel/UCerqUyiV_Ucuy03N942T3vg",
     },
   ],
   menus: [
@@ -73,7 +73,7 @@ export default {
   ],
   copyright: (
     <MKTypography variant="button" fontWeight="regular">
-      All rights reserved. Copyright &copy; {date} Material Kit by{" "}
+      Bản quyền &copy; {date} dựa trên Material UI bởi{" "}
       <MKTypography
         component="a"
         href="https://www.creative-tim.com"
@@ -82,7 +82,7 @@ export default {
         variant="button"
         fontWeight="regular"
       >
-        Creative Tim
+        Hồ Thái Bình
       </MKTypography>
       .
     </MKTypography>

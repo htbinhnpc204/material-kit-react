@@ -164,7 +164,16 @@ function Computer() {
               <Card sx={{ height: "250px" }}>
                 <CardHeader title={computer.name} />
                 <CardContent>
-                  <Typography variant="body1">{computer.description}</Typography>
+                  <Typography
+                    sx={{
+                      display: "-webkit-box",
+                      overflow: "hidden",
+                      WebkitBoxOrient: "vertical",
+                      WebkitLineClamp: 3,
+                    }}
+                  >
+                    {computer.description}
+                  </Typography>
                 </CardContent>
                 <CommonActions
                   handleEdit={handleEdit}

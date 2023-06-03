@@ -16,9 +16,6 @@ Coded by www.creative-tim.com
 // prop-types is a library for typechecking of props.
 import PropTypes from "prop-types";
 
-// react-router-dom components
-import { Link } from "react-router-dom";
-
 // @mui material components
 import MuiLink from "@mui/material/Link";
 
@@ -74,7 +71,15 @@ function RotatingCard({ color, image, title, description, action }) {
                 {action.label}
               </MKButton>
             ) : (
-              <MKButton component={Link} to={action.route} color="white" size="small" fullWidth>
+              <MKButton
+                component={MuiLink}
+                href={action.route}
+                target="_blank"
+                rel="noopener noreferrer"
+                color="white"
+                size="small"
+                fullWidth
+              >
                 {action.label}
               </MKButton>
             )}

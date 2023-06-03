@@ -42,21 +42,21 @@ function Information() {
                 icon="touch_app"
                 title={
                   <>
-                    Feel the
+                    Các chức năng
                     <br />
-                    Material Kit
+                    chính
                   </>
                 }
-                description="All the MUI components that you need in a development have been re-design with the new look."
+                description="Hệ thống quản lý phòng máy UTE."
               />
               <RotatingCardBack
                 image={bgBack}
-                title="Discover More"
-                description="You will save a lot of time going from prototyping to full-functional code because all elements are implemented."
+                title="Tìm hiểu thêm"
+                description="Với ứng dụng này, bạn sẽ tiết kiệm lượng lớn thời gian trong quá trình quản lý hệ thống phòng máy tại trường đại học sư phạm kỹ thuật"
                 action={{
                   type: "internal",
-                  route: "/sections/page-sections/page-headers",
-                  label: "start with header",
+                  route: "https://fb.me/binhhothai204",
+                  label: "Ghé thăm chúng tôi",
                 }}
               />
             </RotatingCard>
@@ -66,16 +66,15 @@ function Information() {
               <Grid item xs={12} md={6}>
                 <DefaultInfoCard
                   icon="content_copy"
-                  title="Full Documentation"
-                  description="Built by developers for developers. Check the foundation and you will find
-                    everything inside our documentation."
+                  title="Quản lý phòng máy"
+                  description="Cho phép thực hiện các thao tác quản lý phòng máy như: chỉnh sửa thông tin phòng máy, thêm mới phòng máy, xóa phòng máy, xem các máy tính hiện có trong phòng máy."
                 />
               </Grid>
               <Grid item xs={12} md={6}>
                 <DefaultInfoCard
                   icon="flip_to_front"
-                  title="MUI Ready"
-                  description="The world's most popular react components library for building user interfaces."
+                  title="Quản lý lịch sử dụng phòng máy"
+                  description="Cho phép giảng viên đăng ký sử dụng phòng máy, đơn đăng ký sử dụng cần được nhân viên tiếp quản phòng máy phê duyệt."
                 />
               </Grid>
             </Grid>
@@ -83,15 +82,15 @@ function Information() {
               <Grid item xs={12} md={6}>
                 <DefaultInfoCard
                   icon="price_change"
-                  title="Save Time & Money"
-                  description="Creating your design from scratch with dedicated designers can be very expensive. Start with our Design System."
+                  title="Xem thời khóa biểu"
+                  description="Các sinh viên xem thời khóa biểu, lịch học liên quan đến phòng máy."
                 />
               </Grid>
               <Grid item xs={12} md={6}>
                 <DefaultInfoCard
                   icon="devices"
-                  title="Fully Responsive"
-                  description="Regardless of the screen size, the website content will naturally fit the given resolution."
+                  title="Báo lỗi máy tính"
+                  description="Sinh viên thực hiện gửi biểu mẫu báo lỗi nếu phát hiện ra máy tính bị lỗi."
                 />
               </Grid>
             </Grid>
