@@ -36,6 +36,9 @@ function LabModal({ computer, labs, isOpen, onClose, onSubmit }) {
   };
 
   const handleSave = () => {
+    if (!name || !description || !lab) {
+      return;
+    }
     onSubmit({
       id: computer?.id,
       name: name,
@@ -88,10 +91,10 @@ function LabModal({ computer, labs, isOpen, onClose, onSubmit }) {
         </MKBox>
       </DialogContent>
       <DialogActions>
-        <Button onClick={onClose}>Hủy</Button>
-        <Button onClick={handleSave} color="primary">
-          Lưu
+        <Button onClick={onClose} color="info">
+          Hủy
         </Button>
+        <Button onClick={handleSave}>Lưu</Button>
       </DialogActions>
     </Dialog>
   );

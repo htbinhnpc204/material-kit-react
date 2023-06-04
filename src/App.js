@@ -10,7 +10,7 @@ import Landing from "layouts/pages/landing";
 import Presentation from "layouts/pages/presentation";
 
 import SignInPage from "layouts/pages/authentication/sign-in";
-import SignUpPage from "layouts/pages/authentication/signup";
+import SignUpPage from "layouts/pages/authentication/resetpwd";
 import ClassPage from "layouts/pages/class";
 import ClassDetailPage from "layouts/pages/class/detail";
 import Computer from "layouts/pages/computer";
@@ -23,7 +23,6 @@ import "react-toastify/dist/ReactToastify.css";
 import { PrivateRoute } from "components/PrivateRoute";
 import helper from "utils/helper";
 import { AuthContext } from "components/AuthContext/authContext";
-import LoadingFullSize from "components/Loading/fullSize";
 
 export default function App() {
   const { pathname } = useLocation();

@@ -20,6 +20,7 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 
 import moment from "moment";
 import ScheduleModal from "./component/ScheduleModal";
+import ScheduleList from "./component/List";
 
 function Schedule() {
   const [schedules, setSchedules] = useState([]);
@@ -64,14 +65,14 @@ function Schedule() {
         payload: formData,
       });
       res.then(() => {
-        toast.success(`Updated ${newSchedule.name}!!!`);
+        toast.success(`Cập nhật lịch học thành công!!!`);
         fetchSchedules();
       });
     } else {
       api.setJwtToken(helper.getCookie());
       const res = api.post({ path: `${schedulePath}`, payload: formData });
       res.then(() => {
-        toast.success(`Created ${newSchedule.name}!!!`);
+        toast.success(`Tạo lịch học thành công!!!`);
         fetchSchedules();
       });
     }
@@ -79,11 +80,11 @@ function Schedule() {
   };
 
   const handleDelete = (scheduleDel) => {
-    if (confirm(`Do you want to delete schedule ${scheduleDel.name || scheduleDel.email}`)) {
+    if (confirm(`Xác nhận xóa lịch học này`)) {
       api.setJwtToken(helper.getCookie());
       const res = api.delete({ path: `${schedulePath}/${scheduleDel.id}` });
       res.then(() => {
-        toast.success(`Deleted ${scheduleDel.name}!!!`);
+        toast.success(`Xóa thành công!!!`);
         fetchSchedules();
       });
     }
@@ -140,79 +141,11 @@ function Schedule() {
             </MKButton>
           </Grid>
         </Grid>
-        <Table aria-label="simple table">
-          <TableBody>
-            <TableRow component="th">
-              <TableCell style={{ fontWeight: "bold" }}>#</TableCell>
-              <TableCell style={{ fontWeight: "bold" }}>Phòng máy</TableCell>
-              <TableCell style={{ fontWeight: "bold" }}>Lớp học</TableCell>
-              <TableCell align="center" style={{ fontWeight: "bold" }}>
-                Người đặt
-              </TableCell>
-              <TableCell style={{ fontWeight: "bold" }}>Ngày</TableCell>
-              <TableCell style={{ fontWeight: "bold" }} align="center">
-                Thời gian sử dụng
-              </TableCell>
-              <TableCell style={{ fontWeight: "bold" }} align="right" colSpan={3}>
-                Hành động
-              </TableCell>
-            </TableRow>
-          </TableBody>
-          <TableBody>
-            {schedules.map((schedule, idx) => {
-              return (
-                <TableRow key={schedule.id}>
-                  <TableCell>{idx + 1}</TableCell>
-                  <TableCell>{schedule.lab?.name}</TableCell>
-                  <TableCell>{schedule.class_res?.name}</TableCell>
-                  <TableCell align="center">{schedule.register?.name}</TableCell>
-                  <TableCell>
-                    {schedule.time_start
-                      ? `${new Date(schedule.time_start).toDateString()} -- ${new Date(
-                          schedule.time_start
-                        ).toLocaleTimeString()}`
-                      : "Trống"}
-                  </TableCell>
-                  <TableCell align="center">{schedule.time_use}</TableCell>
-                  <TableCell style={{ width: 10, padding: 0 }} align="center">
-                    <MKButton color="info" variant="text" size="small">
-                      <VisibilityIcon />
-                    </MKButton>
-                  </TableCell>
-                  <TableCell style={{ width: 10, padding: 0 }} align="center">
-                    <MKButton
-                      color="success"
-                      variant="text"
-                      size="small"
-                      onClick={() => handleEdit(schedule)}
-                    >
-                      <EditIcon />
-                    </MKButton>
-                  </TableCell>
-                  <TableCell style={{ width: 10, padding: 0 }} align="center">
-                    <MKButton
-                      color="error"
-                      variant="text"
-                      size="small"
-                      onClick={() => handleDelete(schedule)}
-                    >
-                      <DeleteIcon />
-                    </MKButton>
-                  </TableCell>
-                </TableRow>
-              );
-            })}
-          </TableBody>
-        </Table>
-        <MKBox display="flex" justifyContent="center" mt={3}>
-          {pagination && (
-            <Pagination
-              count={Math.ceil(pagination.total / pagination.per_page)}
-              page={page}
-              onChange={(_, p) => setPage(p)}
-            />
-          )}
-        </MKBox>
+        <ScheduleList
+          schedules={schedules}
+          pagination={pagination}
+          fetchSchedules={fetchSchedules}
+        />
       </MKBox>
     </>
   );

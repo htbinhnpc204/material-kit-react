@@ -27,8 +27,8 @@ import { useContext, useEffect, useState } from "react";
 import { Icon } from "@mui/material";
 import helper from "utils/helper";
 import { AuthContext } from "components/AuthContext/authContext";
-import LoadingFullSize from "components/Loading/fullSize";
 import routes from "routes";
+import { toast } from "react-toastify";
 
 function BaseLayout({ children }) {
   const userFromStorage = JSON.parse(helper.getStorage("user"));
@@ -38,9 +38,10 @@ function BaseLayout({ children }) {
   useEffect(() => {
     if (helper.getCookie()) {
       setUser(userFromStorage);
-    } else {
+    } else if (helper.getStorage("user")) {
       helper.removeStorage("user");
       setUser(null);
+      toast.error("Phiên đăng nhập hết hạn");
     }
   }, []);
 
@@ -125,7 +126,6 @@ function BaseLayout({ children }) {
 
   return (
     <>
-      <LoadingFullSize />
       <DefaultNavbar brand={"Quản lý phòng máy UTE"} routes={getRoute()} sticky />
       <MKBox
         minHeight="75vh"
@@ -134,6 +134,19 @@ function BaseLayout({ children }) {
           position: "relative",
           display: "grid",
           placeItems: "center",
+          "::before": {
+            content: "''",
+            position: "absolute",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: `url(${bgImage})`,
+            backgroundSize: "cover",
+            backgroundPosition: "top",
+            filter: "blur(3px)",
+            zIndex: -1,
+          },
         }}
       >
         <div
@@ -143,10 +156,7 @@ function BaseLayout({ children }) {
             left: 0,
             width: "100%",
             height: "100%",
-            backgroundImage: `url(${bgImage})`,
-            backgroundSize: "fit",
-            backgroundPosition: "top",
-            filter: "blur(3px)",
+            backgroundColor: "rgba(0, 0, 0, 0.5)", // Adjust the opacity to control darkness
             zIndex: -1,
           }}
         />
@@ -162,9 +172,10 @@ function BaseLayout({ children }) {
                 [breakpoints.down("md")]: {
                   fontSize: size["3xl"],
                 },
+                textShadow: "2px 2px 2px gray", // Add white text shadow
               })}
             >
-              Hệ thống quản lý phòng máy UTE
+              Hệ thống quản lý phòng máy tính UTE
             </MKTypography>
             <MKTypography
               variant="body1"
@@ -173,9 +184,9 @@ function BaseLayout({ children }) {
               px={{ xs: 6, lg: 12 }}
               mt={1}
             >
-              Hệ thống quản lý phòng máy cho trường Đại học Sư phạm Kỹ thuật UTE, hỗ trợ sinh viên
-              và giảng viên xem thời khóa biểu học tập, quản lý thông tin các phòng máy, hỗ trợ đặt
-              lịch sử dụng phòng máy.
+              Hệ thống quản lý phòng máy tính cho trường Đại học Sư phạm Kỹ thuật UTE, hỗ trợ sinh
+              viên và giảng viên xem thời khóa biểu học tập, quản lý thông tin các phòng máy, hỗ trợ
+              đặt lịch sử dụng phòng máy.
             </MKTypography>
           </Grid>
         </Container>

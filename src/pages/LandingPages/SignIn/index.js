@@ -36,8 +36,8 @@ import { yupResolver } from "@hookform/resolvers/yup";
 function SignInBasic() {
   const location = useLocation();
   const yupSchema = yup.object({
-    email: yup.string().required("Email is required!").email("Invalid Email!"),
-    password: yup.string().required("Required"),
+    email: yup.string().required("Email không được bỏ trống!").email("Email không đúng định dạng!"),
+    password: yup.string().required("Mật khẩu không được bỏ trống!"),
   });
 
   const {
@@ -147,7 +147,7 @@ function SignInBasic() {
                       error={errors?.password ? true : false}
                       {...register("password")}
                       type="password"
-                      label="Password"
+                      label="Mật khẩu"
                       fullWidth
                     />
                     {errors?.password && (
@@ -165,7 +165,7 @@ function SignInBasic() {
                       onClick={handleSetRememberMe}
                       sx={{ cursor: "pointer", userSelect: "none", ml: -1 }}
                     >
-                      &nbsp;&nbsp;Remember me
+                      &nbsp;&nbsp;Ghi nhớ mật khẩu
                     </MKTypography>
                   </MKBox>
                   <MKBox mt={4} mb={1}>

@@ -144,6 +144,7 @@ function Class() {
             </Grid>
             <Grid item xs={3} md={5} lg={3}>
               <MKButton
+                color="info"
                 style={{ width: "100%" }}
                 variant="contained"
                 startIcon={<Add />}

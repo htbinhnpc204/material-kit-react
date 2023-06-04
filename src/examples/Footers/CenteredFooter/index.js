@@ -37,6 +37,7 @@ function CenteredFooter({ company, links, socials, light }) {
 
   const year = new Date().getFullYear();
 
+  // eslint-disable-next-line no-unused-vars
   const renderLinks = links.map((link) => (
     <MKTypography
       key={link.name}
@@ -67,7 +68,7 @@ function CenteredFooter({ company, links, socials, light }) {
     <MKBox component="footer" py={6}>
       <Grid container justifyContent="center">
         <Grid item xs={10} lg={8}>
-          <Stack
+          {/* <Stack
             direction="row"
             flexWrap="wrap"
             justifyContent="center"
@@ -75,7 +76,7 @@ function CenteredFooter({ company, links, socials, light }) {
             mb={3}
           >
             {renderLinks}
-          </Stack>
+          </Stack> */}
         </Grid>
         <Grid item xs={12} lg={8}>
           <Stack display="flex" direction="row" justifyContent="center" spacing={3} mt={1} mb={3}>
@@ -84,7 +85,7 @@ function CenteredFooter({ company, links, socials, light }) {
         </Grid>
         <Grid item xs={12} lg={8} sx={{ textAlign: "center" }}>
           <MKTypography variant="body2" color={light ? "white" : "secondary"}>
-            Copyright &copy; {year} Material by{" "}
+            Bản quyền &copy; {year} dựa trên Material UI chỉnh sửa bởi{" "}
             <MKTypography
               component={Link}
               href={href}
@@ -105,30 +106,23 @@ function CenteredFooter({ company, links, socials, light }) {
 
 // Setting default values for the props of CenteredFooter
 CenteredFooter.defaultProps = {
-  company: { href: "https://www.creative-tim.com/", name: "Creative Tim" },
-  links: [
-    { href: "https://www.creative-tim.com/", name: "Company" },
-    { href: "https://www.creative-tim.com/presentation", name: "About Us" },
-    { href: "https://www.creative-tim.com/presentation", name: "Team" },
-    { href: "https://www.creative-tim.com/templates/react", name: "Products" },
-    { href: "https://www.creative-tim.com/blog", name: "Blog" },
-    { href: "https://www.creative-tim.com/license", name: "License" },
-  ],
+  company: { name: "Hồ Thái Bình", href: "https://www.facebook.com/binhhothai204/" },
+  links: [],
   socials: [
-    { icon: <FacebookIcon fontSize="small" />, link: "https://www.facebook.com/CreativeTim/" },
+    { icon: <FacebookIcon fontSize="small" />, link: "https://www.facebook.com/binhhothai204/" },
     {
       icon: <TwitterIcon fontSize="small" />,
-      link: "https://twitter.com/creativetim",
+      link: "https://twitter.com/xiaosan204",
     },
     {
       icon: <InstagramIcon fontSize="small" />,
-      link: "https://www.instagram.com/creativetimofficial/",
+      link: "https://www.instagram.com/binhhothai204/",
     },
     {
       icon: <PinterestIcon fontSize="small" />,
-      link: "https://ro.pinterest.com/thecreativetim/",
+      link: "https://ro.pinterest.com/nhiimeo1401/",
     },
-    { icon: <GitHubIcon fontSize="small" />, link: "https://github.com/creativetimofficial" },
+    { icon: <GitHubIcon fontSize="small" />, link: "https://github.com/htbinhnpc204" },
   ],
   light: false,
 };

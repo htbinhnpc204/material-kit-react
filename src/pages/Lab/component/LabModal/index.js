@@ -41,6 +41,9 @@ function LabModal({ lab, isOpen, onClose, onSubmit }) {
   };
 
   const handleSave = () => {
+    if (!name || !description || !lab) {
+      return;
+    }
     onSubmit({
       id: lab?.id,
       name: name,
@@ -95,7 +98,7 @@ function LabModal({ lab, isOpen, onClose, onSubmit }) {
             renderInput={(params) => (
               <TextField
                 {...params}
-                label="Quản lý"
+                label="Người quản lý"
                 InputProps={{
                   ...params.InputProps,
                   type: "search",
@@ -106,10 +109,10 @@ function LabModal({ lab, isOpen, onClose, onSubmit }) {
         </MKBox>
       </DialogContent>
       <DialogActions>
-        <Button onClick={onClose}>Hủy</Button>
-        <Button onClick={handleSave} color="primary">
-          Lưu
+        <Button onClick={onClose} color="info">
+          Hủy
         </Button>
+        <Button onClick={handleSave}>Lưu</Button>
       </DialogActions>
     </Dialog>
   );

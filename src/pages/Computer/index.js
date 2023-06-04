@@ -72,14 +72,14 @@ function Computer() {
         payload: formData,
       });
       res.then(() => {
-        toast.success(`Updated ${newCom.name}!!!`);
+        toast.success(`Đã cập nhật ${newCom.name}!!!`);
         fetchComputers();
       });
     } else {
       api.setJwtToken(helper.getCookie());
       const res = api.post({ path: `${computerPath}`, payload: formData });
       res.then(() => {
-        toast.success(`Created ${newCom.name}!!!`);
+        toast.success(`Tạo mới thành công ${newCom.name}!!!`);
         fetchComputers();
       });
     }
@@ -97,11 +97,11 @@ function Computer() {
   };
 
   const handleDelete = (delCom) => {
-    if (confirm(`Do you want to delete ${delCom.name}`)) {
+    if (confirm(`Bạn có muốn xóa ${delCom.name}`)) {
       api.setJwtToken(helper.getCookie());
       const res = api.delete({ path: `${computerPath}/${delCom.id}` });
       res.then(() => {
-        toast.success(`Deleted ${delCom.name}!!!`);
+        toast.success(`Xóa thành công ${delCom.name}!!!`);
         fetchComputers();
       });
     }
@@ -153,7 +153,12 @@ function Computer() {
             />
           </Grid>
           <Grid item xs={12} md={6} lg={4} sx={{ display: "flex", justifyContent: "flex-end" }}>
-            <MKButton variant="contained" startIcon={<Add />} onClick={() => handleAddComputer()}>
+            <MKButton
+              color="info"
+              variant="contained"
+              startIcon={<Add />}
+              onClick={() => handleAddComputer()}
+            >
               Thêm mới
             </MKButton>
           </Grid>
@@ -161,7 +166,14 @@ function Computer() {
         <Grid container spacing={2}>
           {computers.map((computer) => (
             <Grid item xs={12} sm={6} md={4} key={computer.name}>
-              <Card sx={{ height: "250px" }}>
+              <Card
+                sx={{ height: "300px" }}
+                style={{
+                  boxShadow: "5px 6px 7px 2px rgba(0,0,0,0.3)",
+                  "-webkit-box-shadow": "5px 6px 7px 2px rgba(0,0,0,0.3)",
+                  "-moz-box-shadow": "5px 6px 7px 2px rgba(0,0,0,0.3)",
+                }}
+              >
                 <CardHeader title={computer.name} />
                 <CardContent>
                   <Typography

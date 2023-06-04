@@ -47,7 +47,7 @@ function Information() {
                     chính
                   </>
                 }
-                description="Hệ thống quản lý phòng máy UTE."
+                description="Hệ thống quản lý phòng máy tính UTE."
               />
               <RotatingCardBack
                 image={bgBack}

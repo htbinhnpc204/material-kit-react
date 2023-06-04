@@ -8,6 +8,7 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import MKInput from "components/MKInput";
 import React, { useEffect, useState } from "react";
+import { viVN } from "@mui/x-date-pickers/locales";
 
 // prop-types is a library for typechecking of props
 import { Autocomplete, TextField } from "@mui/material";
@@ -15,6 +16,7 @@ import { StaticDateTimePicker } from "@mui/x-date-pickers";
 import MKBox from "components/MKBox";
 import PropTypes from "prop-types";
 import dayjs from "dayjs";
+import "dayjs/locale/vi";
 import api from "utils/api";
 import helper from "utils/helper";
 
@@ -22,6 +24,7 @@ import { schedules as schedulePath, classes as classPath, labs as labPath } from
 import { toast } from "react-toastify";
 
 function ScheduleModal({ schedule, labs, classes, isOpen, onClose, onSubmit }) {
+  dayjs.locale("vi");
   const [lab, setLab] = useState(null);
   const [_class, setClass] = useState(null);
   const [timeStart, setTimeStart] = useState(null);
@@ -138,8 +141,12 @@ function ScheduleModal({ schedule, labs, classes, isOpen, onClose, onSubmit }) {
   }, [_class, lab, isLoading]);
 
   return (
-    <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <Dialog open={isOpen} onClose={onClose}>
+    <LocalizationProvider
+      dateAdapter={AdapterDayjs}
+      adapterLocale="vi-VN"
+      localeText={viVN.components.MuiLocalizationProvider.defaultProps.localeText}
+    >
+      <Dialog fullWidth open={isOpen} onClose={onClose}>
         <DialogTitle>{schedule ? "Chỉnh sửa lịch" : "Đặt lịch sử dụng"}</DialogTitle>
         <DialogContent>
           <MKBox mt={1} mb={2}>
@@ -185,9 +192,12 @@ function ScheduleModal({ schedule, labs, classes, isOpen, onClose, onSubmit }) {
           <MKBox mb={2}>
             <StaticDateTimePicker
               disabled={isDisabled}
+              ampmInClock
+              minutesStep={5}
               renderInput={(props) => <TextField {...props} />}
               minDateTime={dayjs(new Date())}
               shouldDisableTime={(date) => isDisable(date)}
+              showDaysOutsideCurrentMonth={true}
               disablePast
               value={timeStart}
               onChange={handleTimeStartChange}

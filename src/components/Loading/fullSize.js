@@ -1,20 +1,14 @@
-import { Dialog, CircularProgress } from "@mui/material";
+import React from "react";
+import CircularProgress from "@mui/material/CircularProgress";
 
-function LoadingFullSize() {
+const Loading = () => {
   return (
-    <Dialog
-      fullScreen
-      style={{
-        width: "100vw",
-        height: "100vh",
-        backgroundColor: "white",
-        justifyItems: "center",
-        alignItems: "center",
-      }}
+    <div
+      style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh" }}
     >
-      <CircularProgress size={80} />
-    </Dialog>
+      <CircularProgress />
+    </div>
   );
-}
+};
 
-export default LoadingFullSize;
+export default Loading;

@@ -1,9 +1,15 @@
-import BaseLayout from "pages/BaseLayout";
+import BaseLayout from "layouts/sections/components/BaseLayout";
 import ClassDetail from "pages/Class/component/ClassDetail";
 
-export default function ClassDetailPage() {
+export default function ClassPage() {
   return (
-    <BaseLayout>
+    <BaseLayout
+      breadcrumb={[
+        { label: "Trang chủ", route: "/" },
+        { label: "Quản ký lớp học", route: "/classes" },
+        { label: "Chi tiết lớp" },
+      ]}
+    >
       <ClassDetail />
     </BaseLayout>
   );

@@ -142,15 +142,27 @@ function Lab() {
             />
           </Grid>
           <Grid item xs={12} md={12} lg={4} sx={{ display: "flex", justifyContent: "flex-end" }}>
-            <MKButton variant="contained" startIcon={<Add />} onClick={() => handleAddLab()}>
+            <MKButton
+              color="info"
+              variant="contained"
+              startIcon={<Add />}
+              onClick={() => handleAddLab()}
+            >
               Thêm mới
             </MKButton>
           </Grid>
         </Grid>
         <Grid container spacing={2}>
           {labs.map((lab) => (
-            <Grid item xs={12} sm={6} md={4} key={lab.name}>
-              <Card sx={{ height: "300px" }}>
+            <Grid item xs={12} sm={6} md={4} key={lab.id}>
+              <Card
+                sx={{ height: "300px" }}
+                style={{
+                  boxShadow: "5px 6px 7px 5px rgba(0,0,0,0.3)",
+                  "-webkit-box-shadow": "5px 6px 7px 5px rgba(0,0,0,0.3)",
+                  "-moz-box-shadow": "5px 6px 7px 5px rgba(0,0,0,0.3)",
+                }}
+              >
                 <CardHeader title={lab.name} />
                 <CardContent>
                   <Typography variant="body2">Quản lý bởi: {lab.manager.name}</Typography>
@@ -176,9 +188,11 @@ function Lab() {
             </Grid>
           ))}
           {labs.length === 0 && (
-            <Typography variant="h3" ml={2}>
-              Không có phòng máy nào
-            </Typography>
+            <Grid item xs={12} sm={6} md={4}>
+              <Typography variant="h3" ml={2}>
+                Không có phòng máy nào
+              </Typography>
+            </Grid>
           )}
         </Grid>
         <MKBox display="flex" justifyContent="center" mt={3}>

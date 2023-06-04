@@ -6,7 +6,7 @@ import * as yup from "yup";
 import { Link, useNavigate } from "react-router-dom";
 
 // @mui material components
-import { CircularProgress } from "@mui/material";
+import { CircularProgress, Typography } from "@mui/material";
 import Card from "@mui/material/Card";
 import Grid from "@mui/material/Grid";
 
@@ -41,7 +41,7 @@ function SignUpBasic() {
   const [isLoading, setLoading] = useState(false);
 
   const yupSchema = yup.object({
-    student_id: yup.string().required("Student id is required!"),
+    student_id: yup.string().required("Mã sinh viên không được để trống!"),
   });
 
   const {
@@ -64,14 +64,18 @@ function SignUpBasic() {
     });
     registerRes
       .then(() => {
-        toast.success(`Password reset successfully`, {
-          position: toast.POSITION.BOTTOM_LEFT,
-        });
+        toast.success(
+          `Mật khẩu mới đã được gửi vào mail của bạn ${data["student_id"]}@sv.ute.udn.vn`,
+          {
+            position: toast.POSITION.BOTTOM_LEFT,
+          }
+        );
         setLoading(false);
+        navigate("/sign-in");
       })
       .catch((error) => {
         setLoading(false);
-        toast.error(`Register failed, ${error.data?.errors[0]?.message}`, {
+        toast.error(`Cấp lại mật khẩu thất bại, ${error.data?.errors[0]?.message}`, {
           position: toast.POSITION.BOTTOM_LEFT,
         });
       });
@@ -85,7 +89,7 @@ function SignUpBasic() {
 
   return (
     <>
-      <DefaultNavbar routes={[]} transparent light />
+      <DefaultNavbar brand={"Trang chủ"} routes={[]} transparent light />
       <MKBox
         position="absolute"
         top={0}
@@ -132,6 +136,11 @@ function SignUpBasic() {
                       {...register("student_id")}
                       fullWidth
                     />
+                    {errors?.student_id && (
+                      <Typography variant="caption" color="error">
+                        {errors?.student_id.message}
+                      </Typography>
+                    )}
                   </MKBox>
                   <MKBox mt={4} mb={1}>
                     <MKButton
@@ -152,13 +161,13 @@ function SignUpBasic() {
                           size={"1rem"}
                         />
                       )}
-                      sign up
+                      Cấp lại mật khẩu
                     </MKButton>
                   </MKBox>
                 </MKBox>
                 <MKBox mt={3} mb={1} textAlign="center">
                   <MKTypography variant="button" color="text">
-                    Already had an account?{" "}
+                    Đã có tài khoản?{" "}
                     <MKTypography
                       component={Link}
                       to="/sign-in"
@@ -167,7 +176,7 @@ function SignUpBasic() {
                       fontWeight="medium"
                       textGradient
                     >
-                      Sign up
+                      Đăng nhập
                     </MKTypography>
                   </MKTypography>
                 </MKBox>

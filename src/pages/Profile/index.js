@@ -1,15 +1,18 @@
+/* eslint-disable no-unused-vars */
 // @mui material components
+import { Divider } from "@mui/material";
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
-import Icon from "@mui/material/Icon";
 
 // Material Kit 2 React components
 import MKAvatar from "components/MKAvatar";
 import MKBox from "components/MKBox";
 import MKTypography from "components/MKTypography";
+import ScheduleList from "pages/Schedule/component/List";
 
 // Images
 import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 import api from "utils/api";
 import helper from "utils/helper";
 import { info } from "utils/path";
@@ -17,7 +20,7 @@ import { info } from "utils/path";
 function Profile() {
   const [user, setUser] = useState({});
 
-  useEffect(() => {
+  const fetchInfo = () => {
     api.setJwtToken(helper.getCookie());
     const res = api.get({ path: `${info}` });
     res.then((response) => {
@@ -26,6 +29,10 @@ function Profile() {
         helper.setStorage("user", JSON.stringify(response.data?.data));
       }
     });
+  };
+
+  useEffect(() => {
+    fetchInfo();
   }, []);
 
   return (
@@ -41,15 +48,12 @@ function Profile() {
             />
           </MKBox>
           <Grid container justifyContent="center" py={6}>
-            <Grid item xs={12} md={7} mx={{ xs: "auto", sm: 6, md: 1 }}>
-              <MKBox display="flex" justifyContent="space-between" alignItems="center" mb={1}>
-                <MKTypography variant="h3">{user?.name}</MKTypography>
-                {/* <MKButton variant="outlined" color="info" size="small">
-                  Follow
-                </MKButton> */}
+            <Grid item xs={12} md={9} lg={9} mx={{ xs: "auto", sm: 6, md: 1 }}>
+              <MKBox display="flex" justifyContent="center" alignItems="center" mb={1}>
+                <MKTypography variant="h2">{user?.name}</MKTypography>
               </MKBox>
               <Grid container spacing={3} mb={3}>
-                <Grid item>
+                <Grid item xs={12} md={6} lg={6}>
                   <MKTypography component="span" variant="body2" color="text">
                     Mã sinh viên:&nbsp;
                   </MKTypography>
@@ -57,15 +61,21 @@ function Profile() {
                     {user?.student_id || "Null"}
                   </MKTypography>
                 </Grid>
-                <Grid item>
+                <Grid item xs={12} md={6} lg={6}>
                   <MKTypography component="span" variant="body2" color="text">
                     Ngày sinh:&nbsp;
                   </MKTypography>
                   <MKTypography component="span" variant="body2" fontWeight="bold">
-                    {user?.dob ? new Date(user?.dob).toDateString() : "Null"}
+                    {user?.dob
+                      ? new Date(user?.dob).toLocaleDateString("vi-VN", {
+                          year: "numeric",
+                          month: "long",
+                          day: "numeric",
+                        })
+                      : "Null"}
                   </MKTypography>
                 </Grid>
-                <Grid item>
+                <Grid item xs={12} md={6} lg={6}>
                   <MKTypography component="span" variant="body2" color="text">
                     Số điện thoại:&nbsp;
                   </MKTypography>
@@ -73,7 +83,7 @@ function Profile() {
                     {user?.phone || "Null"}
                   </MKTypography>
                 </Grid>
-                <Grid item>
+                <Grid item xs={12} md={6} lg={6}>
                   <MKTypography component="span" variant="body2" color="text">
                     Giới tính:&nbsp;
                   </MKTypography>
@@ -82,35 +92,6 @@ function Profile() {
                   </MKTypography>
                 </Grid>
               </Grid>
-              <MKTypography variant="body1" fontWeight="light" color="text">
-                Decisions: If you can&apos;t decide, the answer is no. If two equally difficult
-                paths, choose the one more painful in the short term (pain avoidance is creating an
-                illusion of equality). Choose the path that leaves you more equanimous. <br />
-                <MKTypography
-                  component="a"
-                  href="#"
-                  variant="body1"
-                  fontWeight="light"
-                  color="info"
-                  mt={3}
-                  sx={{
-                    width: "max-content",
-                    display: "flex",
-                    alignItems: "center",
-
-                    "& .material-icons-round": {
-                      transform: `translateX(3px)`,
-                      transition: "transform 0.2s cubic-bezier(0.34, 1.61, 0.7, 1.3)",
-                    },
-
-                    "&:hover .material-icons-round, &:focus .material-icons-round": {
-                      transform: `translateX(6px)`,
-                    },
-                  }}
-                >
-                  More about me <Icon sx={{ fontWeight: "bold" }}>arrow_forward</Icon>
-                </MKTypography>
-              </MKTypography>
             </Grid>
           </Grid>
         </Grid>
