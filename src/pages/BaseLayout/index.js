@@ -105,6 +105,7 @@ function BaseLayout({ children }) {
   const userRoute = [
     {
       name: `Xem thời khóa biểu`,
+      route: `/schedules`,
       icon: <Icon>person</Icon>,
     },
     defaultAuthRoute,

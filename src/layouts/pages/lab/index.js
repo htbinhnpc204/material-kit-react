@@ -1,7 +1,7 @@
 import BaseLayout from "layouts/sections/components/BaseLayout";
 import Lab from "pages/Lab";
 
-export default function LandingPage() {
+export default function LabPage() {
   return (
     <BaseLayout
       title="Quản lý phòng máy"

@@ -23,6 +23,8 @@ import "react-toastify/dist/ReactToastify.css";
 import { PrivateRoute } from "components/PrivateRoute";
 import helper from "utils/helper";
 import { AuthContext } from "components/AuthContext/authContext";
+import LabDetail from "pages/Lab/component/Detail";
+import LabDetailPage from "layouts/pages/lab/detail";
 
 export default function App() {
   const { pathname } = useLocation();
@@ -54,6 +56,14 @@ export default function App() {
           element={
             <PrivateRoute>
               <Lab />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/labs/:id"
+          element={
+            <PrivateRoute>
+              <LabDetailPage />
             </PrivateRoute>
           }
         />

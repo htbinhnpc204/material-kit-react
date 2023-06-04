@@ -12,13 +12,15 @@ import { toast } from "react-toastify";
 import ScheduleModal from "../ScheduleModal";
 import moment from "moment/moment";
 import { CheckCircleTwoTone } from "@mui/icons-material";
+import MKBox from "components/MKBox";
+import { Link } from "react-router-dom";
 
 const ScheduleList = ({ schedules, pagination, fetchSchedules, page, setPage }) => {
   const [labs, setLabs] = useState([]);
   const [classes, setClasses] = useState([]);
   const [openModal, setOpenModal] = useState(false);
   const [selectedSchedule, setSelectedSchedule] = useState({});
-  const role = JSON.parse(helper.getStorage("user"))?.role?.name;
+  const user = JSON.parse(helper.getStorage("user"));
 
   const handleOpenModal = () => {
     setOpenModal(true);
@@ -35,6 +37,17 @@ const ScheduleList = ({ schedules, pagination, fetchSchedules, page, setPage }) 
 
   const handleApprove = (schedule) => {
     console.log(schedule);
+    if (helper.getCookie()) {
+      api.setJwtToken(helper.getCookie());
+      const res = api.get({ path: `${schedulePath}/${schedule.id}/approve` });
+      res
+        .then(() => {
+          toast.success("Đã chấp thuân thời khóa biểu");
+        })
+        .catch(() => {
+          toast.error("Gặp lỗi khi chấp thuận thời khóa biểu");
+        });
+    }
   };
 
   const handleSaveSchedule = (newSchedule) => {
@@ -133,10 +146,13 @@ const ScheduleList = ({ schedules, pagination, fetchSchedules, page, setPage }) 
             <TableCell style={{ fontWeight: "bold" }} align="center">
               Thời gian
             </TableCell>
-            {role.toLowerCase() !== "sinh_vien" && (
-              <TableCell style={{ fontWeight: "bold" }} align="right" colSpan={3}>
-                Hành động
-              </TableCell>
+            {user?.role?.name.toLowerCase() !== "role_sinh_vien" && (
+              <>
+                <TableCell style={{ fontWeight: "bold" }}>Tình trạng</TableCell>
+                <TableCell style={{ fontWeight: "bold" }} align="right" colSpan={3}>
+                  Hành động
+                </TableCell>
+              </>
             )}
           </TableRow>
         </TableBody>
@@ -152,7 +168,11 @@ const ScheduleList = ({ schedules, pagination, fetchSchedules, page, setPage }) 
             return (
               <TableRow key={schedule.id}>
                 <TableCell>{idx + 1}</TableCell>
-                <TableCell>{schedule.lab?.name}</TableCell>
+                <TableCell>
+                  <Link to={`/labs/${schedule.lab.id}`} replace>
+                    {schedule.lab?.name}
+                  </Link>
+                </TableCell>
                 <TableCell>{schedule.class_res?.name}</TableCell>
                 <TableCell align="center">{schedule.register?.name}</TableCell>
                 <TableCell>
@@ -168,9 +188,36 @@ const ScheduleList = ({ schedules, pagination, fetchSchedules, page, setPage }) 
                     : "Trống"}
                 </TableCell>
                 <TableCell align="center">{schedule.time_use}</TableCell>
-                {role.toLowerCase() === "role_quan_tri" && (
+                {user?.role?.name.toLowerCase() !== "role_sinh_vien" &&
+                  schedule.register.id === user.id && (
+                    <>
+                      <TableCell>{schedule.approved ? "Đã duyệt" : "Chưa duyệt"}</TableCell>
+                      <TableCell style={{ width: 10, padding: 0 }} align="center">
+                        <MKButton
+                          color="success"
+                          variant="text"
+                          size="small"
+                          onClick={() => handleEdit(schedule)}
+                        >
+                          <EditIcon />
+                        </MKButton>
+                      </TableCell>
+                      <TableCell style={{ width: 10, padding: 0 }} align="center">
+                        <MKButton
+                          color="error"
+                          variant="text"
+                          size="small"
+                          onClick={() => handleDelete(schedule)}
+                        >
+                          <DeleteIcon />
+                        </MKButton>
+                      </TableCell>
+                    </>
+                  )}
+                {user?.role?.name.toLowerCase() === "role_quan_tri" && (
                   <TableCell style={{ width: 10, padding: 0 }} align="center">
                     <MKButton
+                      disabled={schedule.approved}
                       color="success"
                       variant="text"
                       size="small"
@@ -180,42 +227,20 @@ const ScheduleList = ({ schedules, pagination, fetchSchedules, page, setPage }) 
                     </MKButton>
                   </TableCell>
                 )}
-                {role.toLowerCase() !== "sinh_vien" && (
-                  <>
-                    <TableCell style={{ width: 10, padding: 0 }} align="center">
-                      <MKButton
-                        color="success"
-                        variant="text"
-                        size="small"
-                        onClick={() => handleEdit(schedule)}
-                      >
-                        <EditIcon />
-                      </MKButton>
-                    </TableCell>
-                    <TableCell style={{ width: 10, padding: 0 }} align="center">
-                      <MKButton
-                        color="error"
-                        variant="text"
-                        size="small"
-                        onClick={() => handleDelete(schedule)}
-                      >
-                        <DeleteIcon />
-                      </MKButton>
-                    </TableCell>
-                  </>
-                )}
               </TableRow>
             );
           })}
         </TableBody>
       </Table>
-      {pagination && (
-        <Pagination
-          count={Math.ceil(pagination.total / pagination.per_page)}
-          page={page}
-          onChange={(_, p) => setPage(p)}
-        />
-      )}
+      <MKBox display="flex" justifyContent="center" mt={3}>
+        {pagination && (
+          <Pagination
+            count={Math.ceil(pagination.total / pagination.per_page)}
+            page={page}
+            onChange={(_, p) => setPage(p)}
+          />
+        )}
+      </MKBox>
     </>
   );
 };

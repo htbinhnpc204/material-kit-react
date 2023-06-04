@@ -136,7 +136,7 @@ function BaseLayout({ breadcrumb, title, children }) {
           background: `url(${bgImage})`,
           backgroundSize: "cover",
           backgroundPosition: "center",
-          filter: "blur(8px)", // Adjust the blur intensity as needed
+          filter: "blur(8px)",
           zIndex: -1,
         },
       }}

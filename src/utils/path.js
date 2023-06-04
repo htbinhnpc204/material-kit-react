@@ -6,6 +6,8 @@ export const auth = {
 
 export const labs = "/labs";
 
+export const labDetail = (id) => `/labs/${id}`;
+
 export const classes = "/classes";
 
 export const classUsers = (classId) => `/class/${classId}/users`;
