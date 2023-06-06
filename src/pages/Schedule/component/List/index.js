@@ -141,10 +141,10 @@ const ScheduleList = ({ schedules, pagination, fetchSchedules, page, setPage }) 
               Người đặt
             </TableCell>
             <TableCell style={{ fontWeight: "bold" }} align={"center"}>
-              Ngày
+              Thời gian
             </TableCell>
             <TableCell style={{ fontWeight: "bold" }} align="center">
-              Thời gian
+              Thời gian sử dụng
             </TableCell>
             {user?.role?.name.toLowerCase() !== "role_sinh_vien" && (
               <>
@@ -173,14 +173,14 @@ const ScheduleList = ({ schedules, pagination, fetchSchedules, page, setPage }) 
                     {schedule.lab?.name}
                   </Link>
                 </TableCell>
-                <TableCell>{schedule.class_res?.name}</TableCell>
+                <TableCell>{schedule.class_res?.name || "Không đăng ký lớp học"}</TableCell>
                 <TableCell align="center">{schedule.register?.name}</TableCell>
                 <TableCell>
                   {schedule.time_start
                     ? `${new Date(schedule.time_start).toLocaleDateString("vi-VN", {
                         year: "numeric",
-                        month: "long",
-                        day: "numeric",
+                        month: "2-digit",
+                        day: "2-digit",
                       })} -- ${new Date(schedule.time_start).toLocaleTimeString("vi-VN", {
                         hour: "2-digit",
                         minute: "2-digit",
@@ -188,10 +188,11 @@ const ScheduleList = ({ schedules, pagination, fetchSchedules, page, setPage }) 
                     : "Trống"}
                 </TableCell>
                 <TableCell align="center">{schedule.time_use}</TableCell>
+                <TableCell>{schedule.approved ? "Đã duyệt" : "Chưa duyệt"}</TableCell>
                 {user?.role?.name.toLowerCase() !== "role_sinh_vien" &&
-                  schedule.register.id === user.id && (
+                  (schedule.register.id === user.id ||
+                    user?.role?.name.toLowerCase() === "role_quan_tri") && (
                     <>
-                      <TableCell>{schedule.approved ? "Đã duyệt" : "Chưa duyệt"}</TableCell>
                       <TableCell style={{ width: 10, padding: 0 }} align="center">
                         <MKButton
                           color="success"

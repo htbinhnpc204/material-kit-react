@@ -65,17 +65,29 @@ function ScheduleModal({ schedule, labs, classes, isOpen, onClose, onSubmit }) {
         toast.error("Phòng máy không được bỏ trống");
         flag = false;
       }
+
       if (timeUse <= 0) {
         toast.error("Thời gian sử dụng phải lớn hơn 0");
         flag = false;
       }
 
+      if (timeUse > 5) {
+        toast.error("Thời gian sử dụng không được quá 5h");
+        flag = false;
+      }
+
       let start = dayjs(timeStart);
       let end = start.add(timeUse, "hour");
+      if (end.hour() >= 22) {
+        toast.error("Thời gian sử dụng không hợp lệ");
+        flag = false;
+      }
+
       schedules.forEach((el) => {
         if (!flag) {
           return;
         }
+
         if (start.isBefore(el.start) && end.isAfter(el.start)) {
           toast.error("Thời gian sử dụng không được trùng");
           flag = false;
@@ -125,7 +137,11 @@ function ScheduleModal({ schedule, labs, classes, isOpen, onClose, onSubmit }) {
   };
 
   const isDisable = (date) => {
-    return schedules.some((data) => date.isAfter(data.start) && date.isBefore(data.end));
+    return (
+      schedules.some((data) => date.isAfter(data.start) && date.isBefore(data.end)) ||
+      date.hour() >= 22 ||
+      date.hour() <= 7
+    );
   };
 
   useEffect(() => {

@@ -65,7 +65,6 @@ function UserModal({ user, roles, isOpen, onClose, onSubmit }) {
   };
 
   const handleDobChange = (value) => {
-    console.log(value);
     setDob(value);
   };
 
@@ -78,7 +77,20 @@ function UserModal({ user, roles, isOpen, onClose, onSubmit }) {
   };
 
   const handleRoleChange = (e, value) => {
+    console.log(value);
     setRole(value);
+  };
+
+  const getRoleMap = (role) => {
+    switch (role) {
+      case "ROLE_SINH_VIEN":
+        return "Sinh viên";
+      case "ROLE_GIAO_VIEN":
+        return "Giảng viên";
+      case "ROLE_DAO_TAO":
+        return "Đào tạo";
+    }
+    return "Quản trị viên";
   };
 
   const refreshState = () => {
@@ -113,10 +125,6 @@ function UserModal({ user, roles, isOpen, onClose, onSubmit }) {
       avatar: avatar,
       dob: dob,
     });
-  };
-
-  const capitalize = (value) => {
-    return value.charAt(0).toUpperCase() + value.slice(1).toLowerCase();
   };
 
   useEffect(() => {
@@ -180,7 +188,7 @@ function UserModal({ user, roles, isOpen, onClose, onSubmit }) {
               id="role"
               value={role}
               options={roles}
-              getOptionLabel={(option) => capitalize(option?.name.replaceAll("_", " "))}
+              getOptionLabel={(option) => getRoleMap(option?.name)}
               onChange={handleRoleChange}
               renderInput={(params) => (
                 <TextField

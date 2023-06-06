@@ -158,7 +158,14 @@ function Class() {
         <Grid container spacing={2}>
           {classes.map((_class) => (
             <Grid item xs={12} sm={6} md={4} key={_class.name}>
-              <Card sx={{ height: "250px" }}>
+              <Card
+                sx={{ height: "300px" }}
+                style={{
+                  boxShadow: "5px 6px 7px 2px rgba(0,0,0,0.3)",
+                  "-webkit-box-shadow": "5px 6px 7px 2px rgba(0,0,0,0.3)",
+                  "-moz-box-shadow": "5px 6px 7px 2px rgba(0,0,0,0.3)",
+                }}
+              >
                 <CardHeader title={_class.name} />
                 <CardContent>
                   <Typography variant="body1">{_class.description}</Typography>

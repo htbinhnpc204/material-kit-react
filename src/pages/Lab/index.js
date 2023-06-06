@@ -158,9 +158,9 @@ function Lab() {
               <Card
                 sx={{ height: "300px" }}
                 style={{
-                  boxShadow: "5px 6px 7px 5px rgba(0,0,0,0.3)",
-                  "-webkit-box-shadow": "5px 6px 7px 5px rgba(0,0,0,0.3)",
-                  "-moz-box-shadow": "5px 6px 7px 5px rgba(0,0,0,0.3)",
+                  boxShadow: "5px 6px 7px 2px rgba(0,0,0,0.3)",
+                  "-webkit-box-shadow": "5px 6px 7px 2px rgba(0,0,0,0.3)",
+                  "-moz-box-shadow": "5px 6px 7px 2px rgba(0,0,0,0.3)",
                 }}
               >
                 <CardHeader title={lab.name} />

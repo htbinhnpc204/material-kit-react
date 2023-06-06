@@ -91,7 +91,7 @@ function UserModalView({ user, isOpen, onClose }) {
           </MKBox>
           <MKBox>
             <MKTypography variant="body">
-              Ngày sinh: {user?.dob ? new Date(user.dob).toLocaleDateString("en-GB") : "trống"}
+              Ngày sinh: {user?.dob ? new Date(user.dob).toLocaleDateString("vi-VN") : "trống"}
             </MKTypography>
           </MKBox>
         </MKBox>

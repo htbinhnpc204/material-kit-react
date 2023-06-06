@@ -25,6 +25,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { info } from "utils/path";
 import UserModalView from "./component/ModalView";
 import UserModal from "./component/UserModal";
+import { getRoles } from "@testing-library/react";
 
 function User() {
   const [users, setUsers] = useState([]);
@@ -146,6 +147,18 @@ function User() {
     });
   };
 
+  const getRoleMap = (role) => {
+    switch (role) {
+      case "ROLE_SINH_VIEN":
+        return "Sinh viên";
+      case "ROLE_GIAO_VIEN":
+        return "Giảng viên";
+      case "ROLE_DAO_TAO":
+        return "Đào tạo";
+    }
+    return "Quản trị viên";
+  };
+
   useEffect(() => {
     if (helper.getCookie()) {
       fetchUsers();
@@ -199,6 +212,7 @@ function User() {
               <TableCell style={{ fontWeight: "bold" }}>#</TableCell>
               <TableCell style={{ fontWeight: "bold" }}>Họ tên</TableCell>
               <TableCell style={{ fontWeight: "bold" }}>Email</TableCell>
+              <TableCell style={{ fontWeight: "bold" }}>Chức danh</TableCell>
               <TableCell style={{ fontWeight: "bold" }} align="center">
                 Giới tính
               </TableCell>
@@ -214,6 +228,7 @@ function User() {
                   <TableCell>{idx + 1}</TableCell>
                   <TableCell>{user.name}</TableCell>
                   <TableCell>{user.email}</TableCell>
+                  <TableCell>{getRoleMap(user.role.name)}</TableCell>
                   <TableCell align="center">
                     {genderList.find((g) => g.key === user.gender)?.value}
                   </TableCell>

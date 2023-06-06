@@ -55,8 +55,8 @@ function Information() {
                 description="Với ứng dụng này, bạn sẽ tiết kiệm lượng lớn thời gian trong quá trình quản lý hệ thống phòng máy tại trường đại học sư phạm kỹ thuật"
                 action={{
                   type: "internal",
-                  route: "https://fb.me/binhhothai204",
-                  label: "Ghé thăm chúng tôi",
+                  route: "http://daotao.ute.udn.vn/",
+                  label: "Ghé thăm trang đào tạo",
                 }}
               />
             </RotatingCard>

@@ -11,13 +11,7 @@ import MKBox from "components/MKBox";
 import MKTypography from "components/MKTypography";
 
 // Material Kit 2 React examples
-import DefaultFooter from "examples/Footers/DefaultFooter";
 import DefaultNavbar from "examples/Navbars/DefaultNavbar";
-
-// Landing page components
-
-// Routes
-import footerRoutes from "footer.routes";
 
 // Images
 import bgImage from "assets/images/bg-presentation.jpg";
@@ -29,6 +23,7 @@ import helper from "utils/helper";
 import { AuthContext } from "components/AuthContext/authContext";
 import routes from "routes";
 import { toast } from "react-toastify";
+import CenteredFooter from "examples/Footers/CenteredFooter";
 
 function BaseLayout({ children }) {
   const userFromStorage = JSON.parse(helper.getStorage("user"));
@@ -97,6 +92,7 @@ function BaseLayout({ children }) {
   const gvRoute = [
     {
       name: `Đặt lịch sử dụng phòng máy`,
+      route: `/schedules`,
       icon: <Icon>person</Icon>,
     },
     defaultAuthRoute,
@@ -114,7 +110,7 @@ function BaseLayout({ children }) {
   const getRoute = () => {
     console.log(user?.role?.name);
     switch (user?.role?.name) {
-      case "ROLE_GIANG_VIEN":
+      case "ROLE_GIAO_VIEN":
         return gvRoute;
       case "ROLE_QUAN_TRI":
         return adminRoute;
@@ -206,7 +202,7 @@ function BaseLayout({ children }) {
         {children}
       </Card>
       <MKBox pt={6} px={1} mt={6}>
-        <DefaultFooter content={footerRoutes} />
+        <CenteredFooter />
       </MKBox>
     </>
   );

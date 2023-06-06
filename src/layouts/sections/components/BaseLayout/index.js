@@ -82,6 +82,7 @@ function BaseLayout({ breadcrumb, title, children }) {
   const gvRoute = [
     {
       name: `Đặt lịch sử dụng phòng máy`,
+      route: `/schedules`,
       icon: <Icon>person</Icon>,
     },
     defaultAuthRoute,
@@ -98,7 +99,7 @@ function BaseLayout({ breadcrumb, title, children }) {
   const getRoute = () => {
     console.log(user?.role?.name);
     switch (user?.role?.name) {
-      case "ROLE_GIANG_VIEN":
+      case "ROLE_GIAO_VIEN":
         return gvRoute;
       case "ROLE_QUAN_TRI":
         return adminRoute;
