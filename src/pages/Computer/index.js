@@ -92,10 +92,6 @@ function Computer() {
     handleSearch(value);
   };
 
-  const handleView = (id) => {
-    console.log(id);
-  };
-
   const handleDelete = (delCom) => {
     if (confirm(`Bạn có muốn xóa ${delCom.name}`)) {
       api.setJwtToken(helper.getCookie());
@@ -189,7 +185,6 @@ function Computer() {
                 </CardContent>
                 <CommonActions
                   handleEdit={handleEdit}
-                  handleView={handleView}
                   handleDelete={handleDelete}
                   entity={computer}
                 ></CommonActions>

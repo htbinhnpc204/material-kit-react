@@ -46,7 +46,7 @@ function ClassDetail() {
 
   const fetchUsersList = () => {
     api.setJwtToken(helper.getCookie());
-    const res = api.get({ path: `${userPath}` });
+    const res = api.get({ path: `${userPath}?per_page=99999` });
     res.then((response) => {
       setUsers(response.data?.data?.items);
     });

@@ -94,7 +94,7 @@ function User() {
             helper.setStorage(response.data?.data);
           });
         }
-        toast.success(`Updated ${newUser.name}!!!`);
+        toast.success(`Đã cập nhật thông tin của ${newUser.name}!!!`);
         fetchUsers();
       });
     } else {

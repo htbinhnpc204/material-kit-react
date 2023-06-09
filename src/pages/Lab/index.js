@@ -18,6 +18,7 @@ import helper from "utils/helper";
 import LabModal from "./component/LabModal";
 import "react-toastify/dist/ReactToastify.css";
 import CommonActions from "components/CommonAction";
+import { useNavigate } from "react-router-dom";
 
 function Lab() {
   const [labs, setLabs] = useState([]);
@@ -27,6 +28,8 @@ function Lab() {
   const [keyword, setKeyword] = useState("");
   const [openModal, setOpenModal] = useState(false);
   const [selectedLab, setSelectedLab] = useState({});
+
+  const navigate = useNavigate();
 
   const handleSearch = useCallback(
     debounce((value) => {
@@ -91,7 +94,7 @@ function Lab() {
   };
 
   const handleView = (id) => {
-    console.log(id);
+    navigate(`/labs/${id}`);
   };
 
   const handleDelete = (labDelete) => {
@@ -120,6 +123,13 @@ function Lab() {
       fetchLabs();
     }
   }, [page, keyword]);
+
+  useEffect(() => {
+    const user = JSON.parse(helper.getStorage("user"));
+    if (user?.role?.name !== "ROLE_QUAN_TRI") {
+      navigate(-1);
+    }
+  }, []);
 
   return (
     <>

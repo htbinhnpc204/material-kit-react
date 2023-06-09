@@ -14,10 +14,6 @@ import { classes as classPath, labs as labPath, schedules as schedulePath } from
 import api from "utils/api";
 import helper from "utils/helper";
 
-import DeleteIcon from "@mui/icons-material/Delete";
-import EditIcon from "@mui/icons-material/Edit";
-import VisibilityIcon from "@mui/icons-material/Visibility";
-
 import moment from "moment";
 import ScheduleModal from "./component/ScheduleModal";
 import ScheduleList from "./component/List";
@@ -30,6 +26,7 @@ function Schedule() {
   const [pagination, setPagination] = useState({});
   const [openModal, setOpenModal] = useState(false);
   const [selectedSchedule, setSelectedSchedule] = useState({});
+  const user = JSON.parse(helper.getStorage("user"));
 
   const handleOpenModal = () => {
     setOpenModal(true);
@@ -92,7 +89,11 @@ function Schedule() {
 
   const fetchSchedules = () => {
     api.setJwtToken(helper.getCookie());
-    const res = api.get({ path: `${schedulePath}?page=${page}` });
+    let path = `users/${user.id}/schedules?page=${page}`;
+    if (user.role.name === "ROLE_QUAN_TRI" || user.role.name === "ROLE_DAO_TAO") {
+      path = `${schedulePath}?page=${page}`;
+    }
+    const res = api.get({ path: path });
     res.then((response) => {
       setSchedules(response.data?.data?.items);
       setPagination(response.data?.data?.pagination);
@@ -136,7 +137,13 @@ function Schedule() {
       <MKBox key={"schedules"}>
         <Grid container spacing={2} sx={{ my: 4 }}>
           <Grid item xs={12} md={12} lg={12} sx={{ display: "flex", justifyContent: "flex-end" }}>
-            <MKButton variant="contained" startIcon={<Add />} onClick={() => handleAddLab()}>
+            <MKButton
+              variant="contained"
+              startIcon={<Add />}
+              onClick={() => handleAddLab()}
+              color={"info"}
+              disabled={user?.role?.name === "ROLE_SINH_VIEN"}
+            >
               Thêm lịch sử dụng
             </MKButton>
           </Grid>

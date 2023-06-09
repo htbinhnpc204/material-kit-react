@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import PropTypes from "prop-types";
 import { Table, TableRow, TableCell, TableBody, Pagination, Typography } from "@mui/material";
 import MKButton from "components/MKButton";
@@ -22,6 +22,11 @@ const ScheduleList = ({ schedules, pagination, fetchSchedules, page, setPage }) 
   const [selectedSchedule, setSelectedSchedule] = useState({});
   const user = JSON.parse(helper.getStorage("user"));
 
+  const [sortConfig, setSortConfig] = useState({
+    key: "", // Column key to sort
+    direction: "", // Sorting direction: "asc" or "desc"
+  });
+
   const handleOpenModal = () => {
     setOpenModal(true);
   };
@@ -35,6 +40,48 @@ const ScheduleList = ({ schedules, pagination, fetchSchedules, page, setPage }) 
     handleOpenModal();
   };
 
+  // Helper function to retrieve nested object property value
+  const getObjectPropertyValue = (object, path) => {
+    const properties = path.split(".");
+    let value = object;
+
+    for (let property of properties) {
+      if (value && Object.prototype.hasOwnProperty.call(value, property)) {
+        value = value[property];
+      } else {
+        return object;
+      }
+    }
+
+    return value;
+  };
+
+  const sortedSchedules = useMemo(() => {
+    const key = sortConfig.key;
+    const direction = sortConfig.direction === "asc" ? 1 : -1;
+
+    return [...schedules].sort((a, b) => {
+      const valueA = typeof a[key] === "undefined" ? getObjectPropertyValue(a, key) : a[key];
+      const valueB = typeof b[key] === "undefined" ? getObjectPropertyValue(b, key) : b[key];
+
+      if (valueA < valueB) {
+        return -1 * direction;
+      }
+      if (valueA > valueB) {
+        return 1 * direction;
+      }
+      return 0;
+    });
+  }, [schedules, sortConfig]);
+
+  const handleSort = (key) => {
+    let direction = "asc";
+    if (sortConfig.key === key && sortConfig.direction === "asc") {
+      direction = "desc";
+    }
+    setSortConfig({ key, direction });
+  };
+
   const handleApprove = (schedule) => {
     console.log(schedule);
     if (helper.getCookie()) {
@@ -43,6 +90,7 @@ const ScheduleList = ({ schedules, pagination, fetchSchedules, page, setPage }) 
       res
         .then(() => {
           toast.success("Đã chấp thuân thời khóa biểu");
+          fetchSchedules();
         })
         .catch(() => {
           toast.error("Gặp lỗi khi chấp thuận thời khóa biểu");
@@ -83,12 +131,12 @@ const ScheduleList = ({ schedules, pagination, fetchSchedules, page, setPage }) 
   };
 
   const handleDelete = (scheduleDel) => {
-    if (confirm(`Do you want to delete schedule ${scheduleDel.name || scheduleDel.email}`)) {
+    if (confirm(`Xác nhận xóa thời khóa biểu`)) {
       api.setJwtToken(helper.getCookie());
       const res = api.delete({ path: `${schedulePath}/${scheduleDel.id}` });
       res
         .then(() => {
-          toast.success(`Deleted ${scheduleDel.name}!!!`);
+          toast.success(`Đã xóa thành công!!!`);
           fetchSchedules();
         })
         .catch(() => {
@@ -135,20 +183,38 @@ const ScheduleList = ({ schedules, pagination, fetchSchedules, page, setPage }) 
         <TableBody>
           <TableRow component="th">
             <TableCell style={{ fontWeight: "bold" }}>#</TableCell>
-            <TableCell style={{ fontWeight: "bold" }}>Phòng máy</TableCell>
-            <TableCell style={{ fontWeight: "bold" }}>Lớp học</TableCell>
+            <TableCell style={{ fontWeight: "bold" }}>
+              <span onClick={() => handleSort("lab.name")}>Phòng máy</span>
+              {sortConfig.key === "lab.name" && (
+                <span>{sortConfig.direction === "asc" ? "▲" : "▼"}</span>
+              )}
+            </TableCell>
+            <TableCell style={{ fontWeight: "bold" }}>
+              <span onClick={() => handleSort("class_res.name")}>Lớp học</span>
+              {sortConfig.key === "class_res.name" && (
+                <span>{sortConfig.direction === "asc" ? "▲" : "▼"}</span>
+              )}
+            </TableCell>
             <TableCell align="center" style={{ fontWeight: "bold" }}>
               Người đặt
             </TableCell>
             <TableCell style={{ fontWeight: "bold" }} align={"center"}>
-              Thời gian
+              <span onClick={() => handleSort("time_start")}>Thời gian</span>
+              {sortConfig.key === "time_start" && (
+                <span>{sortConfig.direction === "asc" ? "▲" : "▼"}</span>
+              )}
             </TableCell>
             <TableCell style={{ fontWeight: "bold" }} align="center">
               Thời gian sử dụng
             </TableCell>
             {user?.role?.name.toLowerCase() !== "role_sinh_vien" && (
               <>
-                <TableCell style={{ fontWeight: "bold" }}>Tình trạng</TableCell>
+                <TableCell style={{ fontWeight: "bold" }}>
+                  <span onClick={() => handleSort("approved")}>Tình trạng</span>
+                  {sortConfig.key === "approved" && (
+                    <span>{sortConfig.direction === "asc" ? "▲" : "▼"}</span>
+                  )}
+                </TableCell>
                 <TableCell style={{ fontWeight: "bold" }} align="right" colSpan={3}>
                   Hành động
                 </TableCell>
@@ -164,14 +230,12 @@ const ScheduleList = ({ schedules, pagination, fetchSchedules, page, setPage }) 
               </TableCell>
             </TableRow>
           )}
-          {schedules.map((schedule, idx) => {
+          {sortedSchedules.map((schedule, idx) => {
             return (
               <TableRow key={schedule.id}>
                 <TableCell>{idx + 1}</TableCell>
                 <TableCell>
-                  <Link to={`/labs/${schedule.lab.id}`} replace>
-                    {schedule.lab?.name}
-                  </Link>
+                  <Link to={`/labs/${schedule.lab.id}`}>{schedule.lab?.name}</Link>
                 </TableCell>
                 <TableCell>{schedule.class_res?.name || "Không đăng ký lớp học"}</TableCell>
                 <TableCell align="center">{schedule.register?.name}</TableCell>

@@ -8,7 +8,6 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { CircularProgress, Typography } from "@mui/material";
 import Card from "@mui/material/Card";
 import Grid from "@mui/material/Grid";
-import Switch from "@mui/material/Switch";
 
 // @mui icons
 import HomeIcon from "@mui/icons-material/Home";
@@ -32,6 +31,7 @@ import { AuthContext } from "components/AuthContext/authContext";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
+import helper from "utils/helper";
 
 function SignInBasic() {
   const location = useLocation();
@@ -49,20 +49,13 @@ function SignInBasic() {
     resolver: yupResolver(yupSchema),
   });
 
-  const [rememberMe, setRememberMe] = useState(false);
   const [isLoading, setLoading] = useState(false);
 
   const { login, isAuthenticated } = useContext(AuthContext);
 
   const navigate = useNavigate();
 
-  const handleSetRememberMe = () => setRememberMe(!rememberMe);
-
   const onSubmit = (data) => {
-    if (rememberMe) {
-      localStorage.setItem("oldEmail", data.email);
-      localStorage.setItem("oldPassword", data.password);
-    }
     setLoading(true);
     login(data.email, data.password, setLoading);
   };
@@ -155,18 +148,6 @@ function SignInBasic() {
                         {errors?.password.message}
                       </Typography>
                     )}
-                  </MKBox>
-                  <MKBox display="flex" alignItems="center" ml={-1}>
-                    <Switch checked={rememberMe} onChange={handleSetRememberMe} />
-                    <MKTypography
-                      variant="button"
-                      fontWeight="regular"
-                      color="text"
-                      onClick={handleSetRememberMe}
-                      sx={{ cursor: "pointer", userSelect: "none", ml: -1 }}
-                    >
-                      &nbsp;&nbsp;Ghi nhớ mật khẩu
-                    </MKTypography>
                   </MKBox>
                   <MKBox mt={4} mb={1}>
                     <MKButton

@@ -12,7 +12,7 @@ import { Autocomplete, TextField } from "@mui/material";
 import MKBox from "components/MKBox";
 import PropTypes from "prop-types";
 
-function LabModal({ computer, labs, isOpen, onClose, onSubmit }) {
+function ComputerModal({ computer, labs, isOpen, onClose, onSubmit }) {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [lab, setLab] = useState(null);
@@ -25,7 +25,7 @@ function LabModal({ computer, labs, isOpen, onClose, onSubmit }) {
     setDescription(event.target.value);
   };
 
-  const handleManagerChange = (e, value) => {
+  const handleLabChange = (e, value) => {
     setLab(value);
   };
 
@@ -53,7 +53,7 @@ function LabModal({ computer, labs, isOpen, onClose, onSubmit }) {
 
   return (
     <Dialog fullWidth open={isOpen} onClose={onClose}>
-      <DialogTitle>{lab ? "Chỉnh sửa máy tính" : "Thêm mới máy tính"}</DialogTitle>
+      <DialogTitle>{computer ? "Chỉnh sửa máy tính" : "Thêm mới máy tính"}</DialogTitle>
       <DialogContent>
         <MKBox mt={1} mb={2}>
           <MKInput label="Tên" fullWidth value={name} onChange={handleNameChange} />
@@ -76,7 +76,7 @@ function LabModal({ computer, labs, isOpen, onClose, onSubmit }) {
             value={lab}
             options={labs}
             getOptionLabel={(option) => option?.name}
-            onChange={handleManagerChange}
+            onChange={handleLabChange}
             renderInput={(params) => (
               <TextField
                 {...params}
@@ -100,7 +100,7 @@ function LabModal({ computer, labs, isOpen, onClose, onSubmit }) {
   );
 }
 
-LabModal.propTypes = {
+ComputerModal.propTypes = {
   computer: PropTypes.object.isRequired,
   labs: PropTypes.array.isRequired,
   isOpen: PropTypes.bool.isRequired,
@@ -108,4 +108,4 @@ LabModal.propTypes = {
   onSubmit: PropTypes.func.isRequired,
 };
 
-export default LabModal;
+export default ComputerModal;
