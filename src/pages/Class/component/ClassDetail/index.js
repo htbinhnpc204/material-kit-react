@@ -141,7 +141,6 @@ function ClassDetail() {
                 id="role"
                 value={user}
                 options={users}
-                defaultValue={users[0]}
                 getOptionLabel={(option) => option.name}
                 onChange={(evn, selected) => setUser(selected)}
                 renderInput={(params) => (
@@ -162,7 +161,6 @@ function ClassDetail() {
                 id="role"
                 value={role}
                 options={roles}
-                defaultValue={roles[0]}
                 getOptionLabel={(option) => option.value}
                 onChange={(evn, selected) => setRole(selected)}
                 renderInput={(params) => (
