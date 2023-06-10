@@ -45,10 +45,14 @@ function Class() {
     }
     api.setJwtToken(helper.getCookie());
     const res = api.post({ path: `${classPath}`, payload: { name: newClassName } });
-    res.then(() => {
-      toast.success(`Tạo thành công, ${newClassName}!!!`);
-      fetchComputers();
-    });
+    res
+      .then(() => {
+        toast.success(`Tạo thành công, ${newClassName}!!!`);
+        fetchClases();
+      })
+      .catch(() => {
+        toast.error(`Tạo thất bại`);
+      });
   };
 
   // eslint-disable-next-line no-unused-vars
@@ -65,7 +69,7 @@ function Class() {
       });
       res.then(() => {
         toast.success(`Đã cập nhât lớp ${newClass.name}!!!`);
-        fetchComputers();
+        fetchClases();
       });
     }
   };
@@ -90,12 +94,12 @@ function Class() {
       const res = api.delete({ path: `${classPath}/${delClass.id}` });
       res.then(() => {
         toast.success(`Đã xóa lớp ${delClass.name}!!!`);
-        fetchComputers();
+        fetchClases();
       });
     }
   };
 
-  const fetchComputers = () => {
+  const fetchClases = () => {
     api.setJwtToken(helper.getCookie());
     const res = api.get({ path: `${classPath}?page=${page}&keyword=${keyword}` });
     res.then((response) => {
@@ -106,7 +110,7 @@ function Class() {
 
   useEffect(() => {
     if (helper.getCookie()) {
-      fetchComputers();
+      fetchClases();
     }
   }, [page, keyword]);
 

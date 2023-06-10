@@ -173,6 +173,15 @@ function Computer() {
                 <CardHeader title={computer.name} />
                 <CardContent>
                   <Typography
+                    variant="body2"
+                    style={{
+                      color: computer.activate ? "green" : "red",
+                      fontWeight: 400,
+                    }}
+                  >
+                    {computer.activate ? "Bình thường" : "Đang bảo trì"}
+                  </Typography>
+                  <Typography
                     sx={{
                       display: "-webkit-box",
                       overflow: "hidden",

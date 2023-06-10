@@ -72,17 +72,25 @@ function Lab() {
         path: `${labPath}/${newLab.id}`,
         payload: formData,
       });
-      res.then(() => {
-        toast.success(`Cập nhật thành công ${newLab.name}!!!`);
-        fetchLabs();
-      });
+      res
+        .then(() => {
+          toast.success(`Cập nhật thành công ${newLab.name}!!!`);
+          fetchLabs();
+        })
+        .catch(() => {
+          toast.error("Thêm mới thất bại");
+        });
     } else {
       api.setJwtToken(helper.getCookie());
       const res = api.post({ path: `${labPath}`, payload: formData });
-      res.then(() => {
-        toast.success(`Thêm mới thành công ${newLab.name}!!!`);
-        fetchLabs();
-      });
+      res
+        .then(() => {
+          toast.success(`Thêm mới thành công ${newLab.name}!!!`);
+          fetchLabs();
+        })
+        .catch(() => {
+          toast.error("Chỉnh sửa thất bại");
+        });
     }
     handleCloseModal();
   };
