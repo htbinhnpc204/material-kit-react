@@ -117,7 +117,7 @@ function ClassDetail() {
   const roles = [
     { key: "GIANG_VIEN", value: "Giảng viên" },
     { key: "LOP_TRUONG", value: "Lớp trưởng" },
-    { key: "BI_THU", value: "Bí thư" },
+    { key: "BI_THU", value: "Lớp phó" },
     { key: "THANH_VIEN", value: "Thành viên" },
   ];
 
