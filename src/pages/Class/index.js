@@ -172,10 +172,11 @@ function Class() {
               >
                 <CardHeader title={_class.name} />
                 <CardContent>
-                  <Typography variant="body1">{_class.description}</Typography>
+                  <Typography variant="body1">
+                    Số lượng thành viên: {_class.users?.length}
+                  </Typography>
                 </CardContent>
                 <CommonActions
-                  // handleEdit={handleEdit}
                   handleView={handleView}
                   handleDelete={handleDelete}
                   entity={_class}
