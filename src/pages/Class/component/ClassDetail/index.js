@@ -62,12 +62,19 @@ function ClassDetail() {
     formData.append("role", role.key);
     api.setJwtToken(helper.getCookie());
     const res = api.post({ path: `${classUsers(_class.id)}`, payload: formData });
-    res.then(() => {
-      setUser(null);
-      setRole(null);
-      toast.success(`Thêm ${user.name} vào lớp thành công!!!`);
-      fetchUsers();
-    });
+    res
+      .then(() => {
+        toast.success(`Thêm ${user.name} vào lớp thành công!!!`);
+        fetchUsers();
+      })
+      .catch((error) => {
+        console.log();
+        toast.error(
+          error.response.data?.errors
+            ? error.response.data.errors[0]?.message
+            : error.response.data.message
+        );
+      });
   };
 
   const fetchClassDetails = () => {
@@ -78,7 +85,7 @@ function ClassDetail() {
         setClass(response.data?.data);
       })
       .catch(() => {
-        toast.error("Fetch class details failed");
+        toast.error("Lấy thông tin lớp thất bại");
       });
   };
 
